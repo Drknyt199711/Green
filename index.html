@@ -62,7 +62,7 @@
             color: var(--text-secondary);
             padding: 20px;
         }
-        
+
         .light-mode header {
             border-bottom-color: rgba(0, 0, 0, 0.1);
         }
@@ -98,7 +98,7 @@
             font-size: 1rem;
             transition: all 0.2s;
         }
-        
+
         input, select {
             width: 100%;
             padding: 12px;
@@ -110,15 +110,12 @@
         }
 
         input[type="date"] {
-            /* Styling for date input might need adjustments for appearance across browsers */
             -webkit-appearance: none;
-            /* Removes default date input styling */
             appearance: none;
             background-color: rgba(255, 255, 255, 0.05);
             color: var(--text-color);
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding-right: 15px;
-            /* Space for the calendar icon */
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23bdbdbd"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
             background-repeat: no-repeat;
             background-position: right 10px center;
@@ -128,7 +125,6 @@
         .light-mode input[type="date"] {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23757575"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
         }
-        /* Hide the default calendar icon on some browsers */
         input[type="date"]::-webkit-calendar-picker-indicator {
             opacity: 0;
             width: 100%;
@@ -212,7 +208,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
-            margin-top: 10px;
+            margin-top: 10px; /* Default margin-top, adjusted by specific history tab CSS */
         }
 
         th, td {
@@ -242,26 +238,144 @@
             color: var(--warning-color);
         }
 
+        /* Main Tabs - Sticky at top */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0; /* Remove margin-bottom as dropdown will follow */
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color); /* Ensure background for visibility */
+            z-index: 1000; /* Ensure it's above other content */
+            padding-top: 0; /* No extra padding */
+        }
+
+        .light-mode .tabs {
+            border-bottom-color: rgba(0, 0, 0, 0.1);
+            background-color: var(--bg-color);
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            line-height: 1.5; /* Ensure consistent height for calculations */
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        #bankrollDisplay {
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        /* New Styles for History Tab Controls */
+        .history-controls-container {
+            position: sticky;
+            /* Sticky below tabs */
+            top: calc(45px);
+            /* Height of .tabs (approx 20px padding + 1.5em line-height + 1px border = ~45px) */
+            background-color: var(--card-color);
+            /* To cover content below */
+            z-index: 998;
+            /* Below main tabs, but above table content */
+            padding: 15px;
+            /* Match .card padding */
+            margin: 0 -15px;
+            /* Extend to card edges */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease; /* Smooth transition for background on theme toggle */
+        }
+
+        .light-mode .history-controls-container {
+            background-color: var(--card-color);
+            border-bottom-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-filters-button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: block; /* Make it block to take full width or easily center */
+            width: 100%;
+            text-align: center;
+        }
+
+        .filters-dropdown-content {
+            display: none;
+            padding-top: 10px; /* Space below toggle button */
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out; /* Smooth dropdown animation */
+            overflow: hidden; /* Hide content when collapsed */
+            max-height: 0; /* Initial state for collapsing */
+            opacity: 0; /* Initial state for fading */
+        }
+
+        .filters-dropdown-content.active {
+            display: block; /* Show when active */
+            max-height: 500px; /* Arbitrary max height to allow content to show */
+            opacity: 1; /* Fade in */
+        }
+
+
         .filters {
             display: flex;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
+            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 10px;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .filters input, .filters select {
+        .filters input,
+        .filters select {
             flex: 1;
-            min-width: 120px; /* Ensure inputs don't become too small */
+            min-width: 120px;
         }
 
-        .chart-container {
-            position: relative;
-            height: 250px;
+        .fixed-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
             width: 100%;
+            margin-top: 10px;
         }
 
-        .table-container {
-            overflow-x: auto;
+        .fixed-buttons button {
+            flex: 1;
+            min-width: 100px;
+            margin: 0;
+        }
+
+        /* Adjust table margin to prevent content from being hidden behind sticky header */
+        #history .table-container {
+            /* The table content will start below the sticky controls,
+               so no top margin is needed if the card padding is handled.
+               If card padding is reset, then table can simply start. */
+            padding-top: 15px; /* Add padding to visually separate from dropdown content */
+            padding-bottom: 15px; /* Padding for bottom of card */
+            overflow-y: auto; /* Make table scrollable */
+            max-height: calc(100vh - 120px); /* Adjust based on actual header/tabs/controls height */
+            /* 100vh - (header_height + tabs_height + history_controls_height + some_footer_margin) */
+            /* Rough estimate: 100vh - (60px + 45px + 100px) = 100vh - 205px. Let's use 120px for testing. */
         }
 
         /* Mobile-specific adjustments */
@@ -296,52 +410,24 @@
             }
             .filters {
                 flex-direction: column;
-                /* Stack filters vertically on very small screens */
             }
             .filters input, .filters select {
                 width: 100%;
-                /* Make them full width when stacked */
                 min-width: unset;
             }
-        }
-
-        /* Swipeable tabs for mobile */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-        }
-
-        .light-mode .tabs {
-            border-bottom-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .tab.active {
-            border-bottom-color: var(--primary-color);
-            font-weight: 500;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        #bankrollDisplay {
-            font-size: 1.8rem;
-            text-align: center;
-            margin: 10px 0;
+            .fixed-buttons button {
+                width: 100%; /* Stack buttons vertically on small screens */
+            }
+            .history-controls-container {
+                top: 45px; /* Adjust top for mobile if header size changes */
+                padding: 10px; /* Smaller padding for mobile */
+                margin: 0 -10px; /* Adjust margin to card edges */
+            }
+            #history .table-container {
+                 max-height: calc(100vh - 100px); /* Adjusted for smaller mobile header/controls */
+                 padding-top: 10px;
+                 padding-bottom: 10px;
+            }
         }
     </style>
 </head>
@@ -354,7 +440,6 @@
 
         <div class="tabs">
             <div class="tab active" data-tab="tracker">Tracker</div>
-            
             <div class="tab" data-tab="stats">Stats</div>
             <div class="tab" data-tab="history">History</div>
         </div>
@@ -363,27 +448,23 @@
             <div class="card">
                 <h2>💰 Bankroll</h2>
                 <p id="bankrollDisplay">1000.00 ETB</p>
-                <div 
-                class="grid">
+                <div class="grid">
                     <button id="depositBtn">Deposit</button>
                     <button id="withdrawBtn">Withdraw</button>
                 </div>
             </div>
 
             <div class="card">
-                <h2>➕ 
-                Add Bet</h2>
+                <h2>➕ Add Bet</h2>
                 <input type="text" id="sport" placeholder="Sport (e.g., NBA)" required>
                 <input type="text" id="event" placeholder="Event (e.g., Lakers vs Warriors)" required>
                 <input type="number" id="stake" placeholder="Stake (ETB)" min="0.01" step="0.01" required>
                 <input type="number" id="odds" placeholder="Odds (e.g., 1.95)" min="1.01" step="0.01" required>
-      
                 <select id="outcome">
                     <option value="pending">Pending</option>
                     <option value="win">Win</option>
                     <option value="loss">Loss</option>
                     <option value="void">Void/Canceled</option>
-     
                 </select>
                 <button id="addBetBtn">Add Bet</button>
             </div>
@@ -392,29 +473,24 @@
         <div id="stats" class="tab-content">
             <div class="card">
                 <h2>📊 Performance</h2>
-           
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3>Win Rate</h3>
                         <p id="winRate">0%</p>
                     </div>
-   
                     <div class="stat-card">
                         <h3>Total Profit</h3>
                         <p id="totalProfit">0.00 ETB</p>
                     </div>
-           
                     <div class="stat-card">
                         <h3>ROI</h3>
                         <p id="roi">0%</p>
                     </div>
-                    <div 
-                    class="stat-card">
+                    <div class="stat-card">
                         <h3>Avg Stake</h3>
                         <p id="avgStake">0.00 ETB</p>
                     </div>
                 </div>
-             
                 <div class="chart-container">
                     <canvas id="profitChart"></canvas>
                 </div>
@@ -423,44 +499,44 @@
 
         <div id="history" class="tab-content">
             <div class="card">
-                
                 <h2>📋 Bet History</h2>
-                <div class="filters">
-                    <input type="text" id="searchInput" placeholder="Search event/sport/date...">
-                    <input type="date" id="fromDateFilter" aria-label="Filter from date">
-                    <input type="date" id="toDateFilter" aria-label="Filter to date">
-       
-                    <select id="sportFilter">
-                        <option value="all">All Sports</option>
-                    </select>
-                </div>
-                <div class="table-container">
-       
+                <div class="history-controls-container"> <!-- New sticky container for dropdown and buttons -->
+                    <button id="toggleFiltersBtn" class="toggle-filters-button">Toggle Filters / Actions</button>
+                    <div id="filtersDropdownContent" class="filters-dropdown-content">
+                        <div class="filters">
+                            <input type="text" id="searchInput" placeholder="Search event/sport/date...">
+                            <input type="date" id="fromDateFilter" aria-label="Filter from date">
+                            <input type="date" id="toDateFilter" aria-label="Filter to date">
+                            <select id="sportFilter">
+                                <option value="all">All Sports</option>
+                            </select>
+                        </div>
+                        <div class="fixed-buttons"> <!-- Buttons are now part of the dropdown content -->
+                            <button id="deleteSelectedBtn" class="danger">Delete Selected</button>
+                            <button id="importBtn" class="secondary2">Import Bets</button>
+                            <button id="exportBtn" class="secondary2">Export as CSV</button>
+                        </div>
+                    </div>
+                </div> <!-- End of history-controls-container -->
+
+                <div class="table-container"> <!-- This is the only scrollable element -->
                     <table id="betTable" aria-label="Bet history">
                         <thead>
                             <tr>
-                                
                                 <th><input type="checkbox" id="selectAllBets"></th>
                                 <th>Date</th>
                                 <th>Sport</th>
                                 <th>Event</th>
-  
                                 <th>Stake</th>
                                 <th>Odds</th>
                                 <th>Result</th>
-      
                                 <th>P/L</th>
                                 <th>Actions</th>
                             </tr>
-              
                         </thead>
                         <tbody id="betList"></tbody>
                     </table>
                 </div>
-                <button id="deleteSelectedBtn" class="danger">Delete Selected</button>
-          
-                <button id="importBtn" class="secondary2">Import Bets</button>
-                <button id="exportBtn" class="secondary2">Export as CSV</button>
             </div>
         </div>
     </div>
@@ -489,6 +565,11 @@
         const tabContents = document.querySelectorAll('.tab-content');
         const selectAllBetsCheckbox = document.getElementById('selectAllBets');
         const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+
+        const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+        const filtersDropdownContent = document.getElementById('filtersDropdownContent');
+
+
         // Initialize
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.remove('dark-mode');
@@ -496,6 +577,7 @@
         }
 
         updateUI();
+
         // Tab Navigation
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -503,15 +585,23 @@
                 tabContents.forEach(c => c.classList.remove('active'));
                 
                 tab.classList.add('active');
-     
                 document.getElementById(tab.dataset.tab).classList.add('active');
                 
                 if (tab.dataset.tab === 'stats') {
                     updateUI('chart');
                 }
+                // When switching tabs, ensure the dropdown is closed
+                if (filtersDropdownContent.classList.contains('active')) {
+                    filtersDropdownContent.classList.remove('active');
+                }
             });
-     
         });
+
+        // Toggle Filters Dropdown
+        toggleFiltersBtn.addEventListener('click', () => {
+            filtersDropdownContent.classList.toggle('active');
+        });
+
 
         // Core Functions
         function saveData() {
@@ -519,7 +609,8 @@
                 localStorage.setItem('bets', JSON.stringify(bets));
                 localStorage.setItem('bankroll', bankroll);
             } catch (e) {
-                alert("Storage failed! Export your data before closing.");
+                // Using a custom message box instead of alert()
+                displayMessageBox("Storage failed! Export your data before closing.", "error");
                 console.error(e);
             }
         }
@@ -545,7 +636,6 @@
                 year: 'numeric', 
                 month: 'short', 
                 day: 'numeric',
-             
                 hour: '2-digit', 
                 minute: '2-digit'
             };
@@ -559,7 +649,6 @@
             return 0;
         }
 
-        // New function to get filtered bets
         function getFilteredBets() {
             const searchTerm = searchInput.value.toLowerCase();
             const sport = sportFilter.value;
@@ -571,24 +660,20 @@
 
                 const matchesSearch = 
                     bet.sport.toLowerCase().includes(searchTerm) || 
-            
                     bet.event.toLowerCase().includes(searchTerm) ||
                     formatDate(bet.date).toLowerCase().includes(searchTerm); // Search also by formatted date
                 
                 const matchesSport = sport === 'all' || bet.sport === sport;
 
                 let matchesDateRange = true;
-     
                 if (fromDateStr) {
                     const fromDate = new Date(fromDateStr);
                     fromDate.setHours(0, 0, 0, 0); // Set time to beginning of the day for consistent comparison
                     if (betDate < fromDate) {
-     
                         matchesDateRange = false;
                     }
                 }
                 if (toDateStr && matchesDateRange) { // Only check if already matched fromDate
-                
                     const toDate = new Date(toDateStr);
                     toDate.setHours(23, 59, 59, 999); // Set time to end of the day for consistent comparison
                     if (betDate > toDate) {
@@ -618,23 +703,19 @@
                 row.dataset.originalIndex = originalIndex;
 
                 const checkboxCell = document.createElement('td');
-    
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'bet-checkbox';
                 checkboxCell.appendChild(checkbox);
                 row.appendChild(checkboxCell);
                 
- 
                 ['date', 'sport', 'event', 'stake', 'odds', 'outcome'].forEach(field => {
                     const cell = document.createElement('td');
                     if (field === 'date') {
                         cell.textContent = formatDate(bet.date);
-     
                     } else if (field === 'stake') {
                         cell.textContent = bet.stake.toFixed(2) + ' ETB';
                     } else if (field === 'odds') {
-                        
                         cell.textContent = bet.odds.toFixed(2);
                     } else if (field === 'outcome') {
                         cell.textContent = bet.outcome;
@@ -655,7 +736,17 @@
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete';
                 deleteButton.className = 'danger';
-                deleteButton.onclick = () => deleteBet(row.dataset.originalIndex);
+                // Using a custom confirmation message box instead of alert()/confirm()
+                deleteButton.onclick = () => displayConfirmationBox('Are you sure you want to delete this bet?', () => {
+                    const betToDelete = bets[originalIndex];
+                    if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
+                        // Reverse the profit/loss from the bankroll
+                        bankroll -= calculateProfit(betToDelete);
+                    }
+                    bets.splice(originalIndex, 1);
+                    saveData();
+                    updateUI('all'); // Ensure bankroll, stats, and chart are fully updated
+                });
                 actionsCell.appendChild(deleteButton);
                 row.appendChild(actionsCell);
 
@@ -689,14 +780,12 @@
 
         function renderProfitChart(filteredBets) { // Accept filteredBets as argument
             const ctx = document.getElementById('profitChart');
-            // First check if chart exists and is a valid Chart instance
             if (profitChart && typeof profitChart.destroy === 'function') {
                 profitChart.destroy();
             }
             
             const settledBets = filteredBets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
             if (settledBets.length === 0) {
-                // Clear the canvas and display a no-data message instead of creating an empty chart
                 const parent = ctx.parentNode;
                 const existingNoData = parent.querySelector('.no-data');
                 if (!existingNoData) {
@@ -716,22 +805,18 @@
             }
 
             // Prepare labels for the chart.
-            // CHANGED: Using index numbers for labels instead of dates as requested.
             const chartLabels = settledBets.map((_, index) => `Bet ${index + 1}`);
-
             // Calculate cumulative profit
             let cumulativeProfit = 0;
             const profitData = settledBets.map(bet => {
                 cumulativeProfit += calculateProfit(bet);
                 return cumulativeProfit;
             });
-            // Proceed with chart creation
             profitChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: chartLabels,
                     datasets: [{
-    
                         label: 'Cumulative Profit',
                         data: profitData,
                         borderColor: '#4caf50',
@@ -740,17 +825,14 @@
                         tension: 0.1
                     }]
                 },
-              
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                                  
                         legend: {
                             display: false
                         }
                     }
-                
                 }
             });
         }
@@ -763,27 +845,14 @@
             `;
         }
 
-        function deleteBet(originalIndex) {
-            if (confirm('Are you sure you want to delete this bet?')) {
-                const betToDelete = bets[originalIndex];
-                if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
-                    // Reverse the profit/loss from the bankroll
-                    bankroll -= calculateProfit(betToDelete);
-                }
-                bets.splice(originalIndex, 1);
-                saveData();
-                updateUI('all'); // Ensure bankroll, stats, and chart are fully updated
-            }
-        }
-
         function deleteSelectedBets() {
             const selectedCheckboxes = document.querySelectorAll('.bet-checkbox:checked');
             if (selectedCheckboxes.length === 0) {
-                alert('No bets selected for deletion.');
+                displayMessageBox('No bets selected for deletion.', "info");
                 return;
             }
 
-            if (confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected bets?`)) {
+            displayConfirmationBox(`Are you sure you want to delete ${selectedCheckboxes.length} selected bets?`, () => {
                 const indexesToDelete = Array.from(selectedCheckboxes).map(checkbox => {
                     return parseInt(checkbox.closest('tr').dataset.originalIndex);
                 }).sort((a, b) => b - a); // Sort in descending order to avoid index issues during deletion
@@ -791,7 +860,6 @@
                 indexesToDelete.forEach(index => {
                     const betToDelete = bets[index];
                     if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
-                   
                         // Reverse the profit/loss for each deleted bet
                         bankroll -= calculateProfit(betToDelete);
                     }
@@ -800,7 +868,7 @@
                 saveData();
                 updateUI('all'); // Ensure bankroll, stats, and chart are fully updated
                 selectAllBetsCheckbox.checked = false; // Uncheck select all after deletion
-            }
+            });
         }
 
         async function exportBetsToCSV() {
@@ -814,25 +882,23 @@
                 try {
                     const fileHandle = await window.showSaveFilePicker({
                         suggestedName: 'the_green_book_bet_history.csv',
-                        
                         types: [{
                             description: 'CSV Files',
                             accept: {
                                 'text/csv': ['.csv'],
-       
                             },
                         }],
                     });
                     const writableStream = await fileHandle.createWritable();
                     await writableStream.write(fullCsvContent);
                     await writableStream.close();
-                    alert('Bet history exported successfully!');
+                    displayMessageBox('Bet history exported successfully!', "success");
                 } catch (error) {
                     if (error.name === 'AbortError') {
                         console.log('User aborted the save operation.');
                     } else {
                         console.error('Error saving file:', error);
-                        alert('Error exporting file. Please try again or use the traditional download method.');
+                        displayMessageBox('Error exporting file. Please try again or use the traditional download method.', "error");
                     }
                 }
             } else {
@@ -844,7 +910,7 @@
                 a.download = 'the_green_book_bet_history.csv';
                 a.click();
                 URL.revokeObjectURL(url); // Clean up the URL object
-                alert('Bet history downloaded successfully!');
+                displayMessageBox('Bet history downloaded successfully!', "success");
             }
         }
 
@@ -860,7 +926,7 @@
                 const lines = content.split('\n').filter(line => line.trim() !== '');
 
                 if (lines.length === 0) {
-                    alert('CSV file is empty.');
+                    displayMessageBox('CSV file is empty.', "info");
                     return;
                 }
 
@@ -874,11 +940,9 @@
                     // Format: "Date","Sport","Event",Stake,Odds,Outcome
                     if (parts.length >= 6) { 
                         importedBets.push({
-                  
                             date: parts[0].replace(/"/g, ''),
                             sport: parts[1].replace(/"/g, ''),
                             event: parts[2].replace(/"/g, ''),
-                            
                             stake: parseFloat(parts[3]),
                             odds: parseFloat(parts[4]),
                             outcome: parts[5].replace(/"/g, '')
@@ -890,309 +954,95 @@
                     bets = [...bets, ...importedBets]; // Merge imported bets with existing ones
                     saveData();
                     updateUI('all');
-                    alert(`Successfully imported ${importedBets.length} bets.`);
+                    displayMessageBox(`Successfully imported ${importedBets.length} bets.`, "success");
                 } else {
-                    alert('No valid bets found in the CSV file.');
+                    displayMessageBox('No valid bets found in the CSV file.', "warning");
                 }
             };
             reader.readAsText(file);
         }
-                function renderBetList(filteredBets) { // Accept filteredBets as argument
-            // Sort filteredBets from new to old (most recent date first)
-            filteredBets.sort((a, b) => new Date(b.date) - new Date(a.date));
-            betListEl.innerHTML = '';
+        
+        // Custom Message Box and Confirmation Box (replaces alert/confirm)
+        function createMessageBox(message, type = "info", onConfirm = null, onCancel = null) {
+            const existingBox = document.getElementById('customMessageBox');
+            if (existingBox) existingBox.remove();
 
-            if (filteredBets.length === 0) {
-                betListEl.innerHTML = '<tr><td colspan="9" class="no-data">No bets found matching your criteria.</td></tr>';
-                return;
+            const messageBox = document.createElement('div');
+            messageBox.id = 'customMessageBox';
+            messageBox.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: var(--card-color);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                z-index: 2000;
+                max-width: 300px;
+                text-align: center;
+                color: var(--text-color);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            `;
+
+            const messageText = document.createElement('p');
+            messageText.textContent = message;
+            messageText.style.marginBottom = '15px';
+            messageText.style.color = `var(--${type}-color, var(--text-color))`;
+            messageBox.appendChild(messageText);
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.display = 'flex';
+            buttonContainer.style.gap = '10px';
+            buttonContainer.style.justifyContent = 'center';
+
+            if (onConfirm) {
+                const confirmBtn = document.createElement('button');
+                confirmBtn.textContent = 'OK';
+                confirmBtn.style.backgroundColor = 'var(--success-color)';
+                confirmBtn.style.color = 'white';
+                confirmBtn.style.flex = '1';
+                confirmBtn.onclick = () => {
+                    onConfirm();
+                    messageBox.remove();
+                };
+                buttonContainer.appendChild(confirmBtn);
             }
 
-            filteredBets.forEach((bet, index) => {
-                const row = document.createElement('tr');
-                const originalIndex = bets.findIndex(originalBet => originalBet === bet); 
-                row.dataset.originalIndex = originalIndex;
-
-                const checkboxCell = document.createElement('td');
-    
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'bet-checkbox';
-                checkboxCell.appendChild(checkbox);
-                row.appendChild(checkboxCell);
-                
- 
-                ['date', 'sport', 'event', 'stake', 'odds', 'outcome'].forEach(field => {
-                    const cell = document.createElement('td');
-                    if (field === 'date') {
-                        cell.textContent = formatDate(bet.date);
-     
-                    } else if (field === 'stake') {
-                        cell.textContent = bet.stake.toFixed(2) + ' ETB';
-                    } else if (field === 'odds') {
-                        
-                        cell.textContent = bet.odds.toFixed(2);
-                    } else if (field === 'outcome') {
-                        cell.textContent = bet.outcome;
-                        cell.className = bet.outcome;
-                    } else {
-                        cell.textContent = bet[field];
-                    }
-                    row.appendChild(cell);
-                });
-
-                const profitCell = document.createElement('td');
-                const profit = calculateProfit(bet);
-                profitCell.textContent = profit.toFixed(2) + ' ETB';
-                profitCell.className = profit > 0 ? 'win' : profit < 0 ? 'loss' : '';
-                row.appendChild(profitCell);
-
-                const actionsCell = document.createElement('td');
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Delete';
-                deleteButton.className = 'danger';
-                deleteButton.onclick = () => deleteBet(row.dataset.originalIndex);
-                actionsCell.appendChild(deleteButton);
-                row.appendChild(actionsCell);
-
-                betListEl.appendChild(row);
-            });
-        }
-
-        function updateStats(filteredBets) { // Accept filteredBets as argument
-            const settledBets = filteredBets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
-            if (settledBets.length === 0) {
-                document.getElementById('winRate').textContent = '0%';
-                document.getElementById('totalProfit').textContent = '0.00 ETB';
-                document.getElementById('roi').textContent = '0%';
-                document.getElementById('avgStake').textContent = '0.00 ETB';
-                return;
-            }
-
-            const wins = settledBets.filter(bet => bet.outcome === 'win').length;
-            const totalProfit = settledBets.reduce((sum, bet) => sum + calculateProfit(bet), 0);
-            const totalStaked = settledBets.reduce((sum, bet) => sum + bet.stake, 0);
-            const avgStake = totalStaked / settledBets.length;
-
-            const winRate = (wins / settledBets.length) * 100;
-            const roi = (totalProfit / totalStaked) * 100;
-
-            document.getElementById('winRate').textContent = winRate.toFixed(1) + '%';
-            document.getElementById('totalProfit').textContent = totalProfit.toFixed(2) + ' ETB';
-            document.getElementById('roi').textContent = roi.toFixed(1) + '%';
-            document.getElementById('avgStake').textContent = avgStake.toFixed(2) + ' ETB';
-        }
-
-        function renderProfitChart(filteredBets) { // Accept filteredBets as argument
-            const ctx = document.getElementById('profitChart');
-            // First check if chart exists and is a valid Chart instance
-            if (profitChart && typeof profitChart.destroy === 'function') {
-                profitChart.destroy();
+            if (onCancel) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.style.backgroundColor = 'var(--danger-color)';
+                cancelBtn.style.color = 'white';
+                cancelBtn.style.flex = '1';
+                cancelBtn.onclick = () => {
+                    onCancel();
+                    messageBox.remove();
+                };
+                buttonContainer.appendChild(cancelBtn);
+            } else if (!onConfirm) { // If it's just an info/error message, add a single close button
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = 'Close';
+                closeBtn.style.backgroundColor = 'var(--primary-color)';
+                closeBtn.style.color = 'white';
+                closeBtn.style.flex = '1';
+                closeBtn.onclick = () => messageBox.remove();
+                buttonContainer.appendChild(closeBtn);
             }
             
-            const settledBets = filteredBets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
-            if (settledBets.length === 0) {
-                // Clear the canvas and display a no-data message instead of creating an empty chart
-                const parent = ctx.parentNode;
-                const existingNoData = parent.querySelector('.no-data');
-                if (!existingNoData) {
-                     const noDataMessage = document.createElement('p');
-                     noDataMessage.className = 'no-data';
-                     noDataMessage.textContent = 'No settled bets to display for chart.';
-                     parent.appendChild(noDataMessage);
-                }
-                ctx.style.display = 'none'; // Hide canvas if no data
-                profitChart = null;
-                return;
-            }
-            ctx.style.display = 'block'; // Show canvas if there is data
-            const existingNoData = ctx.parentNode.querySelector('.no-data');
-            if (existingNoData) {
-                existingNoData.remove();
-            }
-
-            // Prepare labels for the chart.
-            // CHANGED: Using index numbers for labels instead of dates as requested.
-            const chartLabels = settledBets.map((_, index) => `Bet ${index + 1}`);
-
-            // Calculate cumulative profit
-            let cumulativeProfit = 0;
-            const profitData = settledBets.map(bet => {
-                cumulativeProfit += calculateProfit(bet);
-                return cumulativeProfit;
-            });
-            // Proceed with chart creation
-            profitChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartLabels,
-                    datasets: [{
-    
-                        label: 'Cumulative Profit',
-                        data: profitData,
-                        borderColor: '#4caf50',
-                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                        fill: true,
-                        tension: 0.1
-                    }]
-                },
-              
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                                  
-                        legend: {
-                            display: false
-                        }
-                    }
-                
-                }
-            });
+            messageBox.appendChild(buttonContainer);
+            document.body.appendChild(messageBox);
         }
 
-        function updateSportFilter() {
-            const sports = [...new Set(bets.map(bet => bet.sport))];
-            sportFilter.innerHTML = `
-                <option value="all">All Sports</option>
-                ${sports.map(sport => `<option value="${sport}">${sport}</option>`).join('')}
-            `;
+        function displayMessageBox(message, type = "info") {
+            createMessageBox(message, type);
         }
 
-        function deleteBet(originalIndex) {
-            if (confirm('Are you sure you want to delete this bet?')) {
-                const betToDelete = bets[originalIndex];
-                if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
-                    // Reverse the profit/loss from the bankroll
-                    bankroll -= calculateProfit(betToDelete);
-                }
-                bets.splice(originalIndex, 1);
-                saveData();
-                updateUI('all'); // Ensure bankroll, stats, and chart are fully updated
-            }
+        function displayConfirmationBox(message, onConfirmCallback, onCancelCallback = () => {}) {
+            createMessageBox(message, "warning", onConfirmCallback, onCancelCallback);
         }
 
-        function deleteSelectedBets() {
-            const selectedCheckboxes = document.querySelectorAll('.bet-checkbox:checked');
-            if (selectedCheckboxes.length === 0) {
-                alert('No bets selected for deletion.');
-                return;
-            }
-
-            if (confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected bets?`)) {
-                const indexesToDelete = Array.from(selectedCheckboxes).map(checkbox => {
-                    return parseInt(checkbox.closest('tr').dataset.originalIndex);
-                }).sort((a, b) => b - a); // Sort in descending order to avoid index issues during deletion
-
-                indexesToDelete.forEach(index => {
-                    const betToDelete = bets[index];
-                    if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
-                   
-                        // Reverse the profit/loss for each deleted bet
-                        bankroll -= calculateProfit(betToDelete);
-                    }
-                    bets.splice(index, 1);
-                });
-                saveData();
-                updateUI('all'); // Ensure bankroll, stats, and chart are fully updated
-                selectAllBetsCheckbox.checked = false; // Uncheck select all after deletion
-            }
-        }
-
-        async function exportBetsToCSV() {
-            const headers = "Date,Sport,Event,Stake,Odds,Outcome,Profit\n";
-            const csv = bets.map(bet => 
-                `"${formatDate(bet.date)}","${bet.sport.replace(/"/g, '""')}","${bet.event.replace(/"/g, '""')}",${bet.stake},${bet.odds},${bet.outcome},${calculateProfit(bet)}`
-            ).join('\n');
-            const fullCsvContent = headers + csv;
-
-            if ('showSaveFilePicker' in window) {
-                try {
-                    const fileHandle = await window.showSaveFilePicker({
-                        suggestedName: 'the_green_book_bet_history.csv',
-                        
-                        types: [{
-                            description: 'CSV Files',
-                            accept: {
-                                'text/csv': ['.csv'],
-       
-                            },
-                        }],
-                    });
-                    const writableStream = await fileHandle.createWritable();
-                    await writableStream.write(fullCsvContent);
-                    await writableStream.close();
-                    alert('Bet history exported successfully!');
-                } catch (error) {
-                    if (error.name === 'AbortError') {
-                        console.log('User aborted the save operation.');
-                    } else {
-                        console.error('Error saving file:', error);
-                        alert('Error exporting file. Please try again or use the traditional download method.');
-                    }
-                }
-            } else {
-                // Fallback for browsers that do not support showSaveFilePicker
-                const blob = new Blob([fullCsvContent], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'the_green_book_bet_history.csv';
-                a.click();
-                URL.revokeObjectURL(url); // Clean up the URL object
-                alert('Bet history downloaded successfully!');
-            }
-        }
-
-        function importBets(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result;
-                const lines = content.split('\n').filter(line => line.trim() !== '');
-
-                if (lines.length === 0) {
-                    alert('CSV file is empty.');
-                    return;
-                }
-
-                const importedBets = [];
-                // Skip the first line if it's the header
-                const startIndex = lines[0].startsWith('Date,Sport,Event,Stake,Odds,Outcome,Profit') ? 1 : 0;
-
-                for (let i = startIndex; i < lines.length; i++) {
-                    const parts = lines[i].split(',');
-                    // Expecting 6 parts for a valid bet (excluding the calculated profit)
-                    // Format: "Date","Sport","Event",Stake,Odds,Outcome
-                    if (parts.length >= 6) { 
-                        importedBets.push({
-                  
-                            date: parts[0].replace(/"/g, ''),
-                            sport: parts[1].replace(/"/g, ''),
-                            event: parts[2].replace(/"/g, ''),
-                            
-                            stake: parseFloat(parts[3]),
-                            odds: parseFloat(parts[4]),
-                            outcome: parts[5].replace(/"/g, '')
-                        });
-                    }
-                }
-
-                if (importedBets.length > 0) {
-                    bets = [...bets, ...importedBets]; // Merge imported bets with existing ones
-                    saveData();
-                    updateUI('all');
-                    alert(`Successfully imported ${importedBets.length} bets.`);
-                } else {
-                    alert('No valid bets found in the CSV file.');
-                }
-            };
-            reader.readAsText(file);
-        }
-                // Event Listeners
+        // Event Listeners
         addBetBtn.addEventListener('click', () => {
             const sport = document.getElementById('sport').value.trim();
             const event = document.getElementById('event').value.trim();
@@ -1201,13 +1051,12 @@
             const outcome = document.getElementById('outcome').value;
 
             if (sport && event && stake > 0 && odds >= 1.01) {
-                // Ensure the bankroll can cover the stake for new bets
                 if (outcome === 'pending' && bankroll < stake) {
-                    alert("Not enough funds in your bankroll to place this bet as pending!");
+                    displayMessageBox("Not enough funds in your bankroll to place this bet as pending!", "error");
                     return;
                 }
                 if (outcome === 'loss' && bankroll < stake) {
-                    alert("Not enough funds in your bankroll to record this loss!");
+                    displayMessageBox("Not enough funds in your bankroll to record this loss!", "error");
                     return;
                 }
                 
@@ -1220,7 +1069,6 @@
                     odds,
                     outcome
                 };
-
                 bets.push(newBet);
                 
                 // Update bankroll based on outcome
@@ -1240,31 +1088,107 @@
                 document.getElementById('odds').value = '';
                 document.getElementById('outcome').value = 'pending';
             } else {
-                alert('Please fill in all bet details correctly.');
+                displayMessageBox('Please fill in all bet details correctly.', "warning");
             }
         });
 
         depositBtn.addEventListener('click', () => {
-            const amount = parseFloat(prompt('Enter deposit amount:'));
-            if (!isNaN(amount) && amount > 0) {
-                bankroll += amount;
-                saveData();
-                updateUI('bankroll');
-            } else {
-                alert("Invalid amount!");
-            }
+            // Using a custom prompt-like box for input
+            displayInputBox('Enter deposit amount:', (amountStr) => {
+                const amount = parseFloat(amountStr);
+                if (!isNaN(amount) && amount > 0) {
+                    bankroll += amount;
+                    saveData();
+                    updateUI('bankroll');
+                } else {
+                    displayMessageBox("Invalid amount!", "error");
+                }
+            });
         });
 
         withdrawBtn.addEventListener('click', () => {
-            const amount = parseFloat(prompt('Enter withdrawal amount:'));
-            if (!isNaN(amount) && amount > 0 && bankroll >= amount) {
-                bankroll -= amount;
-                saveData();
-                updateUI('bankroll');
-            } else {
-                alert("Invalid amount or insufficient funds!");
-            }
+            // Using a custom prompt-like box for input
+            displayInputBox('Enter withdrawal amount:', (amountStr) => {
+                const amount = parseFloat(amountStr);
+                if (!isNaN(amount) && amount > 0 && bankroll >= amount) {
+                    bankroll -= amount;
+                    saveData();
+                    updateUI('bankroll');
+                } else {
+                    displayMessageBox("Invalid amount or insufficient funds!", "error");
+                }
+            });
         });
+
+        // Helper for custom input box
+        function displayInputBox(message, onConfirmCallback) {
+            const existingBox = document.getElementById('customInputBox');
+            if (existingBox) existingBox.remove();
+
+            const inputBox = document.createElement('div');
+            inputBox.id = 'customInputBox';
+            inputBox.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: var(--card-color);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                z-index: 2000;
+                max-width: 300px;
+                text-align: center;
+                color: var(--text-color);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            `;
+
+            const messageText = document.createElement('p');
+            messageText.textContent = message;
+            messageText.style.marginBottom = '15px';
+            messageBox.appendChild(messageText);
+
+            const inputField = document.createElement('input');
+            inputField.type = 'number';
+            inputField.placeholder = 'Amount';
+            inputField.style.width = '100%';
+            inputField.style.marginBottom = '10px';
+            inputField.style.padding = '8px';
+            inputField.style.borderRadius = '5px';
+            inputField.style.border = '1px solid var(--text-secondary)';
+            inputField.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+            inputField.style.color = 'var(--text-color)';
+            inputBox.appendChild(inputField);
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.display = 'flex';
+            buttonContainer.style.gap = '10px';
+            buttonContainer.style.justifyContent = 'center';
+
+            const okBtn = document.createElement('button');
+            okBtn.textContent = 'OK';
+            okBtn.style.backgroundColor = 'var(--primary-color)';
+            okBtn.style.color = 'white';
+            okBtn.style.flex = '1';
+            okBtn.onclick = () => {
+                onConfirmCallback(inputField.value);
+                inputBox.remove();
+            };
+            buttonContainer.appendChild(okBtn);
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.style.backgroundColor = 'var(--danger-color)';
+            cancelBtn.style.color = 'white';
+            cancelBtn.style.flex = '1';
+            cancelBtn.onclick = () => inputBox.remove();
+            buttonContainer.appendChild(cancelBtn);
+            
+            inputBox.appendChild(buttonContainer);
+            document.body.appendChild(inputBox);
+            inputField.focus(); // Focus on the input field
+        }
+
 
         selectAllBetsCheckbox.addEventListener('change', (event) => {
             document.querySelectorAll('.bet-checkbox').forEach(checkbox => {
@@ -1272,29 +1196,18 @@
             });
         });
 
-        deleteSelectedBtn.addEventListener('click', deleteSelectedBets);
-
-        exportBtn.addEventListener('click', exportBetsToCSV); // Call the new async function
-
-        importBtn.addEventListener('click', () => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.csv';
-            input.onchange = importBets;
-            input.click();
-        });
+        // Filters event listeners
+        searchInput.addEventListener('input', () => updateUI('bets'));
+        fromDateFilter.addEventListener('change', () => updateUI('bets')); // Listen for 'from' date changes
+        toDateFilter.addEventListener('change', () => updateUI('bets'));   // Listen for 'to' date changes
+        sportFilter.addEventListener('change', () => updateUI('bets'));
 
         themeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
             document.body.classList.toggle('light-mode');
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
         });
-
-        // Filters event listeners
-        searchInput.addEventListener('input', () => updateUI('bets'));
-        fromDateFilter.addEventListener('change', () => updateUI('bets')); // Listen for 'from' date changes
-        toDateFilter.addEventListener('change', () => updateUI('bets'));   // Listen for 'to' date changes
-        sportFilter.addEventListener('change', () => updateUI('bets'));
     </script>
 </body>
 </html>
+
