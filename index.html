@@ -109,6 +109,31 @@
             transition: all 0.2s;
         }
 
+        input[type="date"] {
+            /* Styling for date input might need adjustments for appearance across browsers */
+            -webkit-appearance: none; /* Removes default date input styling */
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding-right: 15px; /* Space for the calendar icon */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23bdbdbd"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 18px;
+        }
+
+        .light-mode input[type="date"] {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23757575"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>');
+        }
+        /* Hide the default calendar icon on some browsers */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
         input, select {
             background-color: rgba(255, 255, 255, 0.05);
             color: var(--text-color);
@@ -217,12 +242,14 @@
 
         .filters {
             display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
             gap: 10px;
             margin-bottom: 10px;
         }
 
         .filters input, .filters select {
             flex: 1;
+            min-width: 120px; /* Ensure inputs don't become too small */
         }
 
         .chart-container {
@@ -264,6 +291,13 @@
 
             th, td {
                 padding: 8px 5px;
+            }
+            .filters {
+                flex-direction: column; /* Stack filters vertically on very small screens */
+            }
+            .filters input, .filters select {
+                width: 100%; /* Make them full width when stacked */
+                min-width: unset;
             }
         }
 
@@ -377,7 +411,9 @@
             <div class="card">
                 <h2>📋 Bet History</h2>
                 <div class="filters">
-                    <input type="text" id="searchInput" placeholder="Search...">
+                    <input type="text" id="searchInput" placeholder="Search event/sport/date...">
+                    <input type="date" id="fromDateFilter" aria-label="Filter from date">
+                    <input type="date" id="toDateFilter" aria-label="Filter to date">
                     <select id="sportFilter">
                         <option value="all">All Sports</option>
                     </select>
@@ -386,6 +422,7 @@
                     <table id="betTable" aria-label="Bet history">
                         <thead>
                             <tr>
+                                <th><input type="checkbox" id="selectAllBets"></th>
                                 <th>Date</th>
                                 <th>Sport</th>
                                 <th>Event</th>
@@ -393,11 +430,14 @@
                                 <th>Odds</th>
                                 <th>Result</th>
                                 <th>P/L</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="betList"></tbody>
                     </table>
                 </div>
+                <button id="deleteSelectedBtn" class="danger">Delete Selected</button>
+                <button id="importBtn" class="secondary2">Import Bets</button>
                 <button id="exportBtn" class="secondary2">Export as CSV</button>
             </div>
         </div>
@@ -417,11 +457,16 @@
         const depositBtn = document.getElementById('depositBtn');
         const withdrawBtn = document.getElementById('withdrawBtn');
         const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
         const themeToggle = document.getElementById('themeToggle');
         const searchInput = document.getElementById('searchInput');
+        const fromDateFilter = document.getElementById('fromDateFilter'); // New 'from' date filter element
+        const toDateFilter = document.getElementById('toDateFilter');     // New 'to' date filter element
         const sportFilter = document.getElementById('sportFilter');
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
+        const selectAllBetsCheckbox = document.getElementById('selectAllBets');
+        const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
 
         // Initialize
         if (localStorage.getItem('theme') === 'light') {
@@ -459,15 +504,17 @@
 
         function updateUI(updateType = 'all') {
             if (updateType === 'all' || updateType === 'bankroll') {
-                bankrollEl.textContent =  bankroll.toFixed(2) + ' ETB';
+                bankrollEl.textContent = bankroll.toFixed(2) + ' ETB';
             }
             if (updateType === 'all' || updateType === 'bets') {
-                renderBetList();
-                updateStats();
-                updateSportFilter();
+                const filteredBets = getFilteredBets(); // Get filtered bets based on current filters
+                renderBetList(filteredBets);
+                updateStats(filteredBets);
+                updateSportFilter(); // Sport filter options depend on all bets, not just filtered
             }
             if (updateType === 'all' || updateType === 'chart') {
-                renderProfitChart();
+                const filteredBets = getFilteredBets(); // Get filtered bets for chart
+                renderProfitChart(filteredBets);
             }
         }
 
@@ -489,29 +536,74 @@
             return 0;
         }
 
-        function renderBetList() {
+        // New function to get filtered bets
+        function getFilteredBets() {
             const searchTerm = searchInput.value.toLowerCase();
             const sport = sportFilter.value;
+            const fromDateStr = fromDateFilter.value; // YYYY-MM-DD
+            const toDateStr = toDateFilter.value;     // YYYY-MM-DD
 
             const filteredBets = bets.filter(bet => {
+                const betDate = new Date(bet.date); // Convert bet date to Date object for comparison
+
                 const matchesSearch = 
                     bet.sport.toLowerCase().includes(searchTerm) || 
-                    bet.event.toLowerCase().includes(searchTerm);
+                    bet.event.toLowerCase().includes(searchTerm) ||
+                    formatDate(bet.date).toLowerCase().includes(searchTerm); // Search also by formatted date
+                
                 const matchesSport = sport === 'all' || bet.sport === sport;
-                return matchesSearch && matchesSport;
+
+                let matchesDateRange = true;
+                if (fromDateStr) {
+                    const fromDate = new Date(fromDateStr);
+                    fromDate.setHours(0, 0, 0, 0); // Set time to beginning of the day for consistent comparison
+                    if (betDate < fromDate) {
+                        matchesDateRange = false;
+                    }
+                }
+                if (toDateStr && matchesDateRange) { // Only check if already matched fromDate
+                    const toDate = new Date(toDateStr);
+                    toDate.setHours(23, 59, 59, 999); // Set time to end of the day for consistent comparison
+                    if (betDate > toDate) {
+                        matchesDateRange = false;
+                    }
+                }
+                
+                return matchesSearch && matchesSport && matchesDateRange;
             });
+
+            return filteredBets;
+        }
+
+        function renderBetList(filteredBets) { // Accept filteredBets as argument
+            // Sort filteredBets from new to old (most recent date first)
+            filteredBets.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             betListEl.innerHTML = '';
 
-            filteredBets.forEach(bet => {
+            if (filteredBets.length === 0) {
+                betListEl.innerHTML = '<tr><td colspan="9" class="no-data">No bets found matching your criteria.</td></tr>';
+                return;
+            }
+
+            filteredBets.forEach((bet, index) => {
                 const row = document.createElement('tr');
+                const originalIndex = bets.findIndex(originalBet => originalBet === bet); 
+                row.dataset.originalIndex = originalIndex;
+
+                const checkboxCell = document.createElement('td');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'bet-checkbox';
+                checkboxCell.appendChild(checkbox);
+                row.appendChild(checkboxCell);
                 
                 ['date', 'sport', 'event', 'stake', 'odds', 'outcome'].forEach(field => {
                     const cell = document.createElement('td');
                     if (field === 'date') {
                         cell.textContent = formatDate(bet.date);
                     } else if (field === 'stake') {
-                        cell.textContent =  bet.stake.toFixed(2) + ' ETB';
+                        cell.textContent = bet.stake.toFixed(2) + ' ETB';
                     } else if (field === 'odds') {
                         cell.textContent = bet.odds.toFixed(2);
                     } else if (field === 'outcome') {
@@ -529,13 +621,27 @@
                 profitCell.className = profit > 0 ? 'win' : profit < 0 ? 'loss' : '';
                 row.appendChild(profitCell);
 
+                const actionsCell = document.createElement('td');
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'danger';
+                deleteButton.onclick = () => deleteBet(row.dataset.originalIndex);
+                actionsCell.appendChild(deleteButton);
+                row.appendChild(actionsCell);
+
                 betListEl.appendChild(row);
             });
         }
 
-        function updateStats() {
-            const settledBets = bets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
-            if (settledBets.length === 0) return;
+        function updateStats(filteredBets) { // Accept filteredBets as argument
+            const settledBets = filteredBets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
+            if (settledBets.length === 0) {
+                document.getElementById('winRate').textContent = '0%';
+                document.getElementById('totalProfit').textContent = '0.00 ETB';
+                document.getElementById('roi').textContent = '0%';
+                document.getElementById('avgStake').textContent = '0.00 ETB';
+                return;
+            }
 
             const wins = settledBets.filter(bet => bet.outcome === 'win').length;
             const totalProfit = settledBets.reduce((sum, bet) => sum + calculateProfit(bet), 0);
@@ -551,51 +657,69 @@
             document.getElementById('avgStake').textContent = avgStake.toFixed(2) + ' ETB';
         }
 
-        function renderProfitChart() {
-  const ctx = document.getElementById('profitChart');
-  
-  // First check if chart exists and is a valid Chart instance
-  if (profitChart && typeof profitChart.destroy === 'function') {
-    profitChart.destroy();
-  }
-  
-  const settledBets = bets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
-  
-  if (settledBets.length === 0) {
-    ctx.innerHTML = '<p class="no-data">No settled bets to display</p>';
-    profitChart = null;
-    return;
-  }
+        function renderProfitChart(filteredBets) { // Accept filteredBets as argument
+            const ctx = document.getElementById('profitChart');
+            // First check if chart exists and is a valid Chart instance
+            if (profitChart && typeof profitChart.destroy === 'function') {
+                profitChart.destroy();
+            }
+            
+            const settledBets = filteredBets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
+            if (settledBets.length === 0) {
+                // Clear the canvas and display a no-data message instead of creating an empty chart
+                const parent = ctx.parentNode;
+                const existingNoData = parent.querySelector('.no-data');
+                if (!existingNoData) {
+                     const noDataMessage = document.createElement('p');
+                     noDataMessage.className = 'no-data';
+                     noDataMessage.textContent = 'No settled bets to display for chart.';
+                     parent.appendChild(noDataMessage);
+                }
+                ctx.style.display = 'none'; // Hide canvas if no data
+                profitChart = null;
+                return;
+            }
+            ctx.style.display = 'block'; // Show canvas if there is data
+            const existingNoData = ctx.parentNode.querySelector('.no-data');
+            if (existingNoData) {
+                existingNoData.remove();
+            }
 
-  // Proceed with chart creation
-  profitChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: settledBets.map((_, i) => `Bet ${i + 1}`),
-      datasets: [{
-        label: 'Cumulative Profit',
-        data: settledBets.reduce((acc, bet) => {
-          const lastProfit = acc.length > 0 ? acc[acc.length - 1] : 0;
-          acc.push(lastProfit + calculateProfit(bet));
-          return acc;
-        }, []),
-        borderColor: '#4caf50',
-        backgroundColor: 'rgba(76, 175, 80, 0.1)',
-        fill: true,
-        tension: 0.1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false
+            // Prepare labels for the chart. Using formatted dates for better readability.
+            const chartLabels = settledBets.map(bet => formatDate(bet.date));
+            
+            // Calculate cumulative profit
+            let cumulativeProfit = 0;
+            const profitData = settledBets.map(bet => {
+                cumulativeProfit += calculateProfit(bet);
+                return cumulativeProfit;
+            });
+
+            // Proceed with chart creation
+            profitChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Cumulative Profit',
+                        data: profitData,
+                        borderColor: '#4caf50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                                            legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
         }
-      }
-    }
-  });
-}
 
         function updateSportFilter() {
             const sports = [...new Set(bets.map(bet => bet.sport))];
@@ -603,6 +727,137 @@
                 <option value="all">All Sports</option>
                 ${sports.map(sport => `<option value="${sport}">${sport}</option>`).join('')}
             `;
+        }
+
+        function deleteBet(originalIndex) {
+            if (confirm('Are you sure you want to delete this bet?')) {
+                const betToDelete = bets[originalIndex];
+                if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
+                    // Reverse the profit/loss from the bankroll
+                    bankroll -= calculateProfit(betToDelete);
+                }
+                bets.splice(originalIndex, 1);
+                saveData();
+                updateUI('all'); // Ensure bankroll, stats, and chart are fully updated
+            }
+        }
+
+        function deleteSelectedBets() {
+            const selectedCheckboxes = document.querySelectorAll('.bet-checkbox:checked');
+            if (selectedCheckboxes.length === 0) {
+                alert('No bets selected for deletion.');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected bets?`)) {
+                const indexesToDelete = Array.from(selectedCheckboxes).map(checkbox => {
+                    return parseInt(checkbox.closest('tr').dataset.originalIndex);
+                }).sort((a, b) => b - a); // Sort in descending order to avoid index issues during deletion
+
+                indexesToDelete.forEach(index => {
+                    const betToDelete = bets[index];
+                    if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
+                        // Reverse the profit/loss for each deleted bet
+                        bankroll -= calculateProfit(betToDelete);
+                    }
+                    bets.splice(index, 1);
+                });
+                saveData();
+                updateUI('all'); // Ensure bankroll, stats, and chart are fully updated
+                selectAllBetsCheckbox.checked = false; // Uncheck select all after deletion
+            }
+        }
+
+        async function exportBetsToCSV() {
+            const headers = "Date,Sport,Event,Stake,Odds,Outcome,Profit\n";
+            const csv = bets.map(bet => 
+                `"${formatDate(bet.date)}","${bet.sport.replace(/"/g, '""')}","${bet.event.replace(/"/g, '""')}",${bet.stake},${bet.odds},${bet.outcome},${calculateProfit(bet)}`
+            ).join('\n');
+
+            const fullCsvContent = headers + csv;
+
+            if ('showSaveFilePicker' in window) {
+                try {
+                    const fileHandle = await window.showSaveFilePicker({
+                        suggestedName: 'the_green_book_bet_history.csv',
+                        types: [{
+                            description: 'CSV Files',
+                            accept: {
+                                'text/csv': ['.csv'],
+                            },
+                        }],
+                    });
+                    const writableStream = await fileHandle.createWritable();
+                    await writableStream.write(fullCsvContent);
+                    await writableStream.close();
+                    alert('Bet history exported successfully!');
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        console.log('User aborted the save operation.');
+                    } else {
+                        console.error('Error saving file:', error);
+                        alert('Error exporting file. Please try again or use the traditional download method.');
+                    }
+                }
+            } else {
+                // Fallback for browsers that do not support showSaveFilePicker
+                const blob = new Blob([fullCsvContent], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'the_green_book_bet_history.csv';
+                a.click();
+                URL.revokeObjectURL(url); // Clean up the URL object
+                alert('Bet history downloaded successfully!');
+            }
+        }
+
+        function importBets(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n').filter(line => line.trim() !== '');
+
+                if (lines.length === 0) {
+                    alert('CSV file is empty.');
+                    return;
+                }
+
+                const importedBets = [];
+                // Skip the first line if it's the header
+                const startIndex = lines[0].startsWith('Date,Sport,Event,Stake,Odds,Outcome,Profit') ? 1 : 0;
+
+                for (let i = startIndex; i < lines.length; i++) {
+                    const parts = lines[i].split(',');
+                    // Expecting 6 parts for a valid bet (excluding the calculated profit)
+                    // Format: "Date","Sport","Event",Stake,Odds,Outcome
+                    if (parts.length >= 6) { 
+                        importedBets.push({
+                            date: parts[0].replace(/"/g, ''),
+                            sport: parts[1].replace(/"/g, ''),
+                            event: parts[2].replace(/"/g, ''),
+                            stake: parseFloat(parts[3]),
+                            odds: parseFloat(parts[4]),
+                            outcome: parts[5].replace(/"/g, '')
+                        });
+                    }
+                }
+
+                if (importedBets.length > 0) {
+                    bets = [...bets, ...importedBets]; // Merge imported bets with existing ones
+                    saveData();
+                    updateUI('all');
+                    alert(`Successfully imported ${importedBets.length} bets.`);
+                } else {
+                    alert('No valid bets found in the CSV file.');
+                }
+            };
+            reader.readAsText(file);
         }
 
         // Event Listeners
@@ -637,14 +892,12 @@
 
             bets.push(newBet);
             saveData();
-            
             if (outcome !== 'pending' && outcome !== 'void') {
                 bankroll += calculateProfit(newBet);
-                saveData();
+                saveData(); // Save bankroll after update
             }
             
             updateUI('all');
-
             // Clear form
             document.getElementById('sport').value = '';
             document.getElementById('event').value = '';
@@ -673,18 +926,22 @@
             }
         });
 
-        exportBtn.addEventListener('click', () => {
-            const headers = "Date,Sport,Event,Stake,Odds,Outcome,Profit\n";
-            const csv = bets.map(bet => 
-                `"${formatDate(bet.date)}","${bet.sport.replace(/"/g, '""')}","${bet.event.replace(/"/g, '""')}",${bet.stake},${bet.odds},${bet.outcome},${calculateProfit(bet)}`
-            ).join('\n');
+        selectAllBetsCheckbox.addEventListener('change', (event) => {
+            document.querySelectorAll('.bet-checkbox').forEach(checkbox => {
+                checkbox.checked = event.target.checked;
+            });
+        });
 
-            const blob = new Blob([headers + csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'the_green_book_bet_history.csv';
-            a.click();
+        deleteSelectedBtn.addEventListener('click', deleteSelectedBets);
+
+        exportBtn.addEventListener('click', exportBetsToCSV); // Call the new async function
+
+        importBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            input.onchange = importBets;
+            input.click();
         });
 
         themeToggle.addEventListener('click', () => {
@@ -694,6 +951,8 @@
         });
 
         searchInput.addEventListener('input', () => updateUI('bets'));
+        fromDateFilter.addEventListener('change', () => updateUI('bets')); // Listen for 'from' date changes
+        toDateFilter.addEventListener('change', () => updateUI('bets'));   // Listen for 'to' date changes
         sportFilter.addEventListener('change', () => updateUI('bets'));
     </script>
 </body>
