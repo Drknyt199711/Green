@@ -450,122 +450,119 @@
                  padding-bottom: 10px;
             }
         }
-
-        /* Styles from calc.txt */
-        .projection-container {
-            background-color: var(--card-color);
-            /* Use card background for consistency */
-            padding: 30px;
-            border-radius: 10px; /* Use card border-radius */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        
+        /* Projection Tab Styles */
+        #projection .projection-container {
+            padding: 20px;
+            border-radius: 8px;
             max-width: 800px;
-            margin: 20px auto;
-            color: var(--text-color); /* Use text color */
+            margin: 0 auto;
         }
-        .light-mode .projection-container {
-            background-color: var(--card-color);
-        }
-        .projection-container h1 {
+
+        #projection h2 {
             text-align: center;
-            color: var(--primary-light); /* Use primary light color */
+            color: var(--primary-light);
             margin-bottom: 25px;
         }
-        .input-group {
+
+        #projection .input-group {
             margin-bottom: 8px;
         }
-        .input-group label {
+
+        #projection .input-group label {
             display: block;
             margin-bottom: 3px;
             font-weight: bold;
             font-size: 0.8em;
         }
-        .input-group input[type="number"] {
+
+        #projection .input-group input[type="number"],
+        #projection .input-group select {
             width: calc(100% - 22px);
             padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Use border from index.html */
-            border-radius: 8px;
-            /* Use border-radius from index.html */
-            font-size: 1rem;
-            /* Use font-size from index.html */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-size: 16px;
             background-color: rgba(255, 255, 255, 0.05);
-            /* Use background from index.html */
             color: var(--text-color);
-            /* Use text color */
         }
-        .light-mode .input-group input[type="number"] {
-            border: 1px solid rgba(0, 0, 0, 0.1);
+
+        .light-mode #projection .input-group input[type="number"],
+        .light-mode #projection .input-group select {
             background-color: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
         }
-        .projection-container button {
+
+        #projection button {
             width: 100%;
             padding: 12px 20px;
-            background-color: var(--primary-color); /* Use primary color */
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 8px; /* Use border-radius from index.html */
-            font-size: 1rem;
-            /* Use font-size from index.html */
+            border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 20px;
         }
-        .projection-container button:hover {
+
+        #projection button:hover {
             background-color: var(--primary-dark);
-            /* Use primary dark for hover */
         }
-        .projection-results {
+
+        #projection .results {
             margin-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Use border from index.html */
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 20px;
         }
-        .light-mode .projection-results {
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+        .light-mode #projection .results {
+            border-top-color: rgba(0, 0, 0, 0.1);
         }
-        .projection-results h2 {
-            color: var(--primary-light);
-            /* Use primary light color */
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .projection-results p {
+
+        #projection .results p {
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 10px;
+            text-align: center;
         }
-        .projection-results p strong {
+
+        #projection .results p strong {
             color: var(--text-color);
-            /* Use text color */
         }
-        .projection-error-message {
+
+        #projection .error-message {
             color: var(--danger-color);
-            /* Use danger color */
             text-align: center;
             margin-top: 10px;
         }
-        .input-grid {
+
+        #projection .input-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
         }
-        .results-column {
+
+        #projection .results-column {
             display: flex;
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
         }
-        .results-column p {
+
+        #projection .results-column p {
             margin: 0;
             padding: 10px;
-            background-color: rgba(255, 255, 255, 0.05); /* Use lighter background */
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 5px;
-            text-align: center;
-            color: var(--text-color);
         }
-        .light-mode .results-column p {
+
+        .light-mode #projection .results-column p {
             background-color: rgba(0, 0, 0, 0.05);
         }
-        .full-width-input {
+
+        #projection .full-width-input {
             grid-column: 1 / -1;
         }
     </style>
@@ -599,7 +596,7 @@
                 <input type="text" id="sport" placeholder="Sport (e.g., NBA)" required>
                 <input type="text" id="event" placeholder="Event (e.g., Lakers vs Warriors)" required>
                 <input type="number" id="stake" placeholder="Stake (ETB)" min="0.01" step="0.01" required>
-                <input type="number" id="odds" placeholder="Odds (e.g., 1.95)" min="1.01" step="0.01" required>
+                <input type="number" id="odds" placeholder="Odds (e.g., 1.95)" min="1.00" step="0.01" required>
                 <select id="outcome">
                     <option value="pending">Pending</option>
                     <option value="win">Win</option>
@@ -678,59 +675,71 @@
                 </div>
             </div>
         </div>
-
         <div id="projection" class="tab-content">
-            <div class="card projection-container">
-                <h1>Projection</h1>
-                <div class="input-group full-width-input">
-                    <label for="initialBankroll">Initial Bankroll (IBR) (ETB):</label>
-                    <input type="number" id="initialBankroll" value="100" min="0" step="1" required>
-                </div>
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label for="bankrollMultiple">IBR Multiple Of:</label>
-                        <input type="number" id="bankrollMultiple" value="50" min="1" step="1" required>
+            <div class="card">
+                <div class="projection-container">
+                    <h2>Bankroll Projection</h2>
+                    <div class="input-group full-width-input">
+                        <label for="initialBankroll">Initial Bankroll (IBR) (ETB):</label>
+                        <input type="number" id="initialBankroll" value="1000" min="0" step="1" required>
                     </div>
-                    <div class="input-group">
-                        <label for="betPercentageOfFloorBankroll">Bet% Floor BR:</label>
-                        <input type="number" id="betPercentageOfFloorBankroll" value="0.20" min="0.01" max="1.0" step="0.01" required>
+
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="bankrollMultiple">IBR Multiple Of:</label>
+                            <input type="number" id="bankrollMultiple" value="50" min="1" step="1" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="betPercentageOfFloorBankroll">Bet% Floor BR:</label>
+                            <input type="number" id="betPercentageOfFloorBankroll" value="0.20" min="0.01" max="1.0" step="0.01" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="winRatePercent">Win %:</label>
+                            <input type="number" id="winRatePercent" value="90" min="0" max="100" step="0.1" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="oddproj">Odds (e.g., 1.3):</label>
+                            <input type="number" id="oddproj" value="1.3"  min="1.00" step="0.01" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="numSlipsPerRound">No. slips /round:</label>
+                            <input type="number" id="numSlipsPerRound" value="10" min="1" step="1" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="numRoundsPerDay">No. rounds /day:</label>
+                            <input type="number" id="numRoundsPerDay" value="2" min="1" step="1" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="maxBetPerSlip">Max Bet/Slip (ETB):</label>
+                            <input type="number" id="maxBetPerSlip" value="1000" min="0.01" step="0.01" required>
+                            <small>Set to a very high value if no practical limit is desired.</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="projectionDays">BR Proj. (days):</label>
+                            <input type="number" id="projectionDays" value="365" min="1" required>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="winRatePercent">Win %:</label>
-                        <input type="number" id="winRatePercent" value="90" min="0" max="100" step="0.1" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="projectionOdds">Odds (e.g., 1.3):</label>
-                        <input type="number" id="projectionOdds" value="1.3" step="0.01" min="1.0" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="numSlipsPerRound">No. slips /round:</label>
-                        <input type="number" id="numSlipsPerRound" value="10" min="1" step="1" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="numRoundsPerDay">No. rounds /day:</label>
-                        <input type="number" id="numRoundsPerDay" value="2" min="1" step="1" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="maxBetPerSlip">Max Bet/Slip (ETB):</label>
-                        <input type="number" id="maxBetPerSlip" value="1000" min="0.01" step="0.01" required>
-                        <small>Set to a very high value if no practical limit is desired.</small>
-                    </div>
-                    <div class="input-group">
-                        <label for="projectionDays">BR Proj. (days):</label>
-                        <input type="number" id="projectionDays" value="365" min="1" required>
-                    </div>
-                </div>
-                <button onclick="calculateGrowth()">Calculate Bankroll Growth</button>
-                <div id="errorMessage" class="projection-error-message"></div>
-                <div class="projection-results">
-                    <h2>Projected Outcomes</h2>
-                    <div class="results-column">
-                        <p>Day 1: <strong><span id="day1Result"></span></strong></p>
-                        <p>Week 1: <strong><span id="week1Result"></span></strong></p>
-                        <p>Month 1: <strong><span id="month1Result"></span></strong></p>
-                        <p>Year 1: <strong><span id="year1Result"></span></strong></p>
-                        <p>End of Projected Days (<span id="projectedDaysLabel"></span> days): <strong><span id="finalProjectionResult"></span></strong></p>
+
+                    <button id="calculateBtn">Calculate Bankroll Growth</button>
+
+                    <div id="errorMessage" class="error-message"></div>
+
+                    <div class="results">
+                        <h2>Projected Outcomes</h2>
+                        <div class="results-column">
+                            <p>Day 1: <strong><span id="day1Result"></span></strong></p>
+                            <p>Week 1: <strong><span id="week1Result"></span></strong></p>
+                            <p>Month 1: <strong><span id="month1Result"></span></strong></p>
+                            <p>Year 1: <strong><span id="year1Result"></span></strong></p>
+                            <p>End of Projected Days (<span id="projectedDaysLabel"></span> days): <strong><span id="finalProjectionResult"></span></strong></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -764,19 +773,6 @@
         const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
         const filtersDropdownContent = document.getElementById('filtersDropdownContent');
 
-        // Projection specific DOM elements
-        const initialBankrollInput = document.getElementById('initialBankroll');
-        const bankrollMultipleInput = document.getElementById('bankrollMultiple');
-        const betPercentageOfFloorBankrollInput = document.getElementById('betPercentageOfFloorBankroll');
-        const winRatePercentInput = document.getElementById('winRatePercent');
-        const projectionOddsInput = document.getElementById('projectionOdds');
-        const numSlipsPerRoundInput = document.getElementById('numSlipsPerRound');
-        const numRoundsPerDayInput = document.getElementById('numRoundsPerDay');
-        const maxBetPerSlipInput = document.getElementById('maxBetPerSlip');
-        const projectionDaysInput = document.getElementById('projectionDays');
-        const errorMessageDiv = document.getElementById('errorMessage');
-
-
         // Initialize
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.remove('dark-mode');
@@ -799,9 +795,6 @@
                 }
                 if (filtersDropdownContent.classList.contains('active')) {
                     filtersDropdownContent.classList.remove('active');
-                }
-                if (tab.dataset.tab === 'projection') {
-                    calculateGrowth(); // Call projection calculation when tab is opened
                 }
             });
         });
@@ -1544,7 +1537,7 @@
                 bet.odds = parseFloat(document.getElementById('editOdds').value);
                 bet.outcome = document.getElementById('editOutcome').value;
 
-                if (!bet.sport || !bet.event || isNaN(bet.stake) || bet.stake <= 0 || isNaN(bet.odds) || bet.odds <= 1) {
+                if (!bet.sport || !bet.event || isNaN(bet.stake) || bet.stake <= 0 || isNaN(bet.odds) || bet.odds <1) {
                     displayMessageBox('Please fill in all bet details correctly.', "error");
                     return;
                 }
@@ -1568,75 +1561,89 @@
                 editModal.remove();
             };
         }
-
-
-        // PROJECTION LOGIC
-        function getBankrollAtDay(day) {
-            let currentBankroll = parseFloat(initialBankrollInput.value);
-            const bankrollMultiple = parseFloat(bankrollMultipleInput.value);
-            const betPercentageOfFloorBankroll = parseFloat(betPercentageOfFloorBankrollInput.value);
-            const winRate = parseFloat(winRatePercentInput.value) / 100;
-            const projectionOdds = parseFloat(projectionOddsInput.value);
-            const numSlipsPerRound = parseInt(numSlipsPerRoundInput.value);
-            const numRoundsPerDay = parseInt(numRoundsPerDayInput.value);
-            const maxBetPerSlip = parseFloat(maxBetPerSlipInput.value);
-            const projectionDays = parseInt(projectionDaysInput.value);
-
-            if (isNaN(currentBankroll) || isNaN(bankrollMultiple) || isNaN(betPercentageOfFloorBankroll) ||
-                isNaN(winRate) || isNaN(projectionOdds) || isNaN(numSlipsPerRound) ||
-                isNaN(numRoundsPerDay) || isNaN(maxBetPerSlip) || isNaN(projectionDays) ||
-                currentBankroll < 0 || bankrollMultiple < 1 || betPercentageOfFloorBankroll <= 0 || betPercentageOfFloorBankroll > 1 ||
-                winRate < 0 || winRate > 1 || projectionOdds <= 1 || numSlipsPerRound < 1 || numRoundsPerDay < 1 || maxBetPerSlip <= 0) {
-                errorMessageDiv.textContent = 'Please enter valid numbers for all projection inputs.';
-                return 0; // Return 0 or handle invalid input as appropriate
-            }
-            errorMessageDiv.textContent = ''; // Clear any previous error messages
-
-
-            for (let d = 0; d <= day; d++) {
-                let dailyBankrollChange = 0;
-                for (let r = 0; r < numRoundsPerDay; r++) {
-                    const floorBankroll = Math.floor(currentBankroll / bankrollMultiple) * bankrollMultiple;
-                    let betAmount = floorBankroll * betPercentageOfFloorBankroll;
-                    
-                    // Apply max bet per slip
-                    if (betAmount > maxBetPerSlip) {
-                        betAmount = maxBetPerSlip;
-                    }
-
-                    for (let s = 0; s < numSlipsPerRound; s++) {
-                        if (Math.random() < winRate) {
-                            // Win
-                            dailyBankrollChange += (betAmount * projectionOdds) - betAmount;
-                        } else {
-                            // Loss
-                            dailyBankrollChange -= betAmount;
-                        }
-                    }
-                }
-                currentBankroll += dailyBankrollChange;
-                // Ensure bankroll doesn't drop below zero if it implies going into negative.
-                // Or set a minimum like initialBankrollInput value
-                if (currentBankroll < 0) {
-                    currentBankroll = 0; // Or some other floor value like 0 or initialBankrollInput.value
-                }
-            }
-            return currentBankroll;
-        }
-
-        // Format currency
-        const formatCurrency = (value) => {
-            if (value === undefined || isNaN(value)) {
-                return 'N/A';
-            }
-            return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        };
-
-        // Calculation function for projection tab
+        
         function calculateGrowth() {
-            const projectionDays = parseInt(projectionDaysInput.value);
+            const initialBankroll = parseFloat(document.getElementById('initialBankroll').value);
+            const bankrollMultiple = parseFloat(document.getElementById('bankrollMultiple').value);
+            const oddproj = parseFloat(document.getElementById('oddproj').value);
+            const winRatePercent = parseFloat(document.getElementById('winRatePercent').value);
+            const maxBetPerSlip = parseFloat(document.getElementById('maxBetPerSlip').value);
+            const numSlipsPerRound = parseInt(document.getElementById('numSlipsPerRound').value);
+            const numRoundsPerDay = parseInt(document.getElementById('numRoundsPerDay').value);
+            const betPercentageOfFloorBankroll = parseFloat(document.getElementById('betPercentageOfFloorBankroll').value);
+            const projectionDays = parseInt(document.getElementById('projectionDays').value);
+            const errorMessageDiv = document.getElementById('errorMessage');
+            errorMessageDiv.textContent = '';
 
-            // Display results with ETB and spacing
+            // Input validation
+            if (isNaN(initialBankroll) || initialBankroll < 0 || (bankrollMultiple > 0 && initialBankroll % bankrollMultiple !== 0)) {
+                errorMessageDiv.textContent = `Please enter an initial bankroll that is a non-negative number and a multiple of ${bankrollMultiple}.`;
+                return;
+            }
+            if (isNaN(bankrollMultiple) || bankrollMultiple < 1) {
+                errorMessageDiv.textContent = 'Please enter a valid multiple for the initial bankroll (at least 1).';
+                return;
+            }
+            if (isNaN(oddproj) || oddproj < 1.0) {
+                errorMessageDiv.textContent = 'Please enter valid odds (must be greater than 1.0).';
+                return;
+            }
+            if (isNaN(winRatePercent) || winRatePercent < 0 || winRatePercent > 100) {
+                errorMessageDiv.textContent = 'Please enter a win rate between 0 and 100%.';
+                return;
+            }
+            if (isNaN(maxBetPerSlip) || maxBetPerSlip <= 0) {
+                errorMessageDiv.textContent = 'Please enter a positive value for maximum bet per slip.';
+                return;
+            }
+            if (isNaN(numSlipsPerRound) || numSlipsPerRound < 1) {
+                errorMessageDiv.textContent = 'Please enter a valid number of slips per round (at least 1).';
+                return;
+            }
+            if (isNaN(numRoundsPerDay) || numRoundsPerDay < 1) {
+                errorMessageDiv.textContent = 'Please enter a valid number of rounds per day (at least 1).';
+                return;
+            }
+            if (isNaN(betPercentageOfFloorBankroll) || betPercentageOfFloorBankroll <= 0 || betPercentageOfFloorBankroll > 1) {
+                errorMessageDiv.textContent = 'Please enter a bet percentage between 0.01 and 1.0 (e.g., 0.20 for 20%).';
+                return;
+            }
+            if (isNaN(projectionDays) || projectionDays < 1) {
+                errorMessageDiv.textContent = 'Please enter a valid number of projection days (at least 1).';
+                return;
+            }
+
+            const winRateDecimal = winRatePercent / 100;
+            const roundGainFactor = (winRateDecimal * oddproj) - 1;
+            let currentBankroll = initialBankroll;
+            const dailyBankrolls = [];
+
+            for (let day = 0; day < projectionDays; day++) {
+                for (let roundNum = 0; roundNum < numRoundsPerDay; roundNum++) {
+                    const floorBankroll = bankrollMultiple > 0 ? Math.floor(currentBankroll / bankrollMultiple) * bankrollMultiple : currentBankroll;
+                    let betAmountRoundCalculated = betPercentageOfFloorBankroll * floorBankroll;
+                    let betPerSlipCalculated = betAmountRoundCalculated / numSlipsPerRound;
+                    let actualBetPerSlip = Math.min(betPerSlipCalculated, maxBetPerSlip);
+                    let actualBetAmountRound = actualBetPerSlip * numSlipsPerRound;
+                    
+                    if (actualBetAmountRound <= 0) {
+                         currentBankroll += 0;
+                         continue;
+                    }
+
+                    const roundChange = roundGainFactor * actualBetAmountRound;
+                    currentBankroll += roundChange;
+                }
+                dailyBankrolls.push(currentBankroll);
+            }
+
+            const getBankrollAtDay = (dayIndex) => dailyBankrolls[dayIndex];
+
+            const formatCurrency = (value) => {
+                if (value === undefined || isNaN(value)) return 'N/A';
+                return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            };
+
             document.getElementById('day1Result').textContent = `ETB ${formatCurrency(getBankrollAtDay(0))}`;
             document.getElementById('week1Result').textContent = `ETB ${formatCurrency(getBankrollAtDay(6))}`;
             document.getElementById('month1Result').textContent = `ETB ${formatCurrency(getBankrollAtDay(29))}`;
@@ -1645,25 +1652,21 @@
             document.getElementById('finalProjectionResult').textContent = `ETB ${formatCurrency(getBankrollAtDay(projectionDays - 1))}`;
         }
 
-        // Run calculation on page load with default values
-        document.addEventListener('DOMContentLoaded', () => {
-            // Only run calculation if the projection tab is active on load or clicked
-            const projectionTab = document.querySelector('.tab[data-tab="projection"]');
-            if (projectionTab && projectionTab.classList.contains('active')) {
-                calculateGrowth();
-            }
-
-            // Add event listeners for projection inputs to re-calculate on change
-            initialBankrollInput.addEventListener('input', calculateGrowth);
-            bankrollMultipleInput.addEventListener('input', calculateGrowth);
-            betPercentageOfFloorBankrollInput.addEventListener('input', calculateGrowth);
-            winRatePercentInput.addEventListener('input', calculateGrowth);
-            projectionOddsInput.addEventListener('input', calculateGrowth);
-            numSlipsPerRoundInput.addEventListener('input', calculateGrowth);
-            numRoundsPerDayInput.addEventListener('input', calculateGrowth);
-            maxBetPerSlipInput.addEventListener('input', calculateGrowth);
-            projectionDaysInput.addEventListener('input', calculateGrowth);
+        // Add event listener for projection tab activation
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // ... existing tab switching code ...
+                
+                if (tab.dataset.tab === 'projection') {
+                    // Set initial bankroll to current bankroll when projection tab is activated
+                    document.getElementById('initialBankroll').value = bankroll.toFixed(2);
+                    calculateGrowth();
+                }
+            });
         });
+
+        // Add event listener for calculate button
+        document.getElementById('calculateBtn').addEventListener('click', calculateGrowth);
     </script>
 </body>
 </html>
