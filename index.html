@@ -380,7 +380,7 @@
         #history .table-container {
             /* The table content will start below the sticky controls,
                so no top margin is needed if the card padding is handled.
-            If card padding is reset, then table can simply start.
+               If card padding is reset, then table can simply start.
             */
             padding-top: 15px;
             /* Add padding to visually separate from dropdown content */
@@ -391,7 +391,7 @@
             max-height: calc(100vh - 120px);
             /* Adjust based on actual header/tabs/controls height */
             /* 100vh - (60px + 45px + 100px) = 100vh - 205px.
-            Let's use 120px for testing. */
+               Let's use 120px for testing. */
         }
 
         /* Mobile-specific adjustments */
@@ -450,88 +450,130 @@
                  padding-bottom: 10px;
             }
         }
-        /* Styles from calc.txt, scoped to #calculator */
-        #calculator {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-        #calculator .calculator-container {
+
+        /* Styles from calc.txt */
+        .projection-container {
             background-color: var(--card-color);
+            /* Use card background for consistency */
             padding: 30px;
-            border-radius: 8px;
+            border-radius: 10px; /* Use card border-radius */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            max-width: 800px;
             margin: 20px auto;
+            color: var(--text-color); /* Use text color */
         }
-        #calculator h1 {
+        .light-mode .projection-container {
+            background-color: var(--card-color);
+        }
+        .projection-container h1 {
             text-align: center;
-            color: var(--primary-light);
+            color: var(--primary-light); /* Use primary light color */
             margin-bottom: 25px;
         }
-        #calculator .input-group {
-            margin-bottom: 15px;
+        .input-group {
+            margin-bottom: 8px;
         }
-        #calculator .input-group label {
+        .input-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: bold;
+            font-size: 0.8em;
         }
-        #calculator .input-group input[type="number"],
-        #calculator .input-group select {
+        .input-group input[type="number"] {
             width: calc(100% - 22px);
             padding: 10px;
-            border: 1px solid var(--text-secondary);
-            border-radius: 4px;
-            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Use border from index.html */
+            border-radius: 8px;
+            /* Use border-radius from index.html */
+            font-size: 1rem;
+            /* Use font-size from index.html */
             background-color: rgba(255, 255, 255, 0.05);
+            /* Use background from index.html */
             color: var(--text-color);
+            /* Use text color */
         }
-        #calculator button {
+        .light-mode .input-group input[type="number"] {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        .projection-container button {
             width: 100%;
             padding: 12px 20px;
-            background-color: var(--primary-color);
+            background-color: var(--primary-color); /* Use primary color */
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 8px; /* Use border-radius from index.html */
+            font-size: 1rem;
+            /* Use font-size from index.html */
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-top: 20px;
         }
-        #calculator button:hover {
+        .projection-container button:hover {
             background-color: var(--primary-dark);
+            /* Use primary dark for hover */
         }
-        #calculator .results {
+        .projection-results {
             margin-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Use border from index.html */
             padding-top: 20px;
         }
-        #calculator .results h2 {
+        .light-mode .projection-results {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .projection-results h2 {
             color: var(--primary-light);
+            /* Use primary light color */
             text-align: center;
             margin-bottom: 15px;
         }
-        #calculator .results p {
+        .projection-results p {
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 10px;
         }
-        #calculator .results p strong {
+        .projection-results p strong {
             color: var(--text-color);
+            /* Use text color */
         }
-        #calculator .error-message {
+        .projection-error-message {
             color: var(--danger-color);
+            /* Use danger color */
             text-align: center;
             margin-top: 10px;
+        }
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .results-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .results-column p {
+            margin: 0;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05); /* Use lighter background */
+            border-radius: 5px;
+            text-align: center;
+            color: var(--text-color);
+        }
+        .light-mode .results-column p {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        .full-width-input {
+            grid-column: 1 / -1;
         }
     </style>
 </head>
 <body class="dark-mode">
     <div class="container">
         <header class="Bighead">
-            <h1><b><b>📗 Green Book </b></b></h1>
+            <h1><b>The Green Book</b></h1>
             <button id="themeToggle" class="secondary" aria-label="Toggle dark/light mode">🌓</button>
         </header>
 
@@ -539,12 +581,12 @@
             <div class="tab active" data-tab="tracker">Tracker</div>
             <div class="tab" data-tab="stats">Stats</div>
             <div class="tab" data-tab="history">History</div>
-            <div class="tab" data-tab="calculator">Calculator</div>
+            <div class="tab" data-tab="projection">Projection</div>
         </div>
 
         <div id="tracker" class="tab-content active">
             <div class="card">
-                <h2>💰 Bankroll</h2>
+                <h2>Bankroll</h2>
                 <p id="bankrollDisplay">1000.00 ETB</p>
                 <div class="grid">
                     <button id="depositBtn">Deposit</button>
@@ -553,7 +595,7 @@
             </div>
 
             <div class="card">
-                <h2>➕ Add Bet</h2>
+                <h2>Add Bet</h2>
                 <input type="text" id="sport" placeholder="Sport (e.g., NBA)" required>
                 <input type="text" id="event" placeholder="Event (e.g., Lakers vs Warriors)" required>
                 <input type="number" id="stake" placeholder="Stake (ETB)" min="0.01" step="0.01" required>
@@ -570,7 +612,7 @@
 
         <div id="stats" class="tab-content">
             <div class="card">
-                <h2>📊 Performance</h2>
+                <h2>Performance</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <h3>Win Rate</h3>
@@ -597,7 +639,7 @@
 
         <div id="history" class="tab-content">
             <div class="card">
-                <h2>📋 Bet History</h2>
+                <h2>Bet History</h2>
                 <div class="history-controls-container">
                     <button id="toggleFiltersBtn" class="toggle-filters-button">Toggle Filters / Actions</button>
                     <div id="filtersDropdownContent" class="filters-dropdown-content">
@@ -616,7 +658,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="table-container">
                     <table id="betTable" aria-label="Bet history">
                         <thead>
@@ -638,45 +679,59 @@
             </div>
         </div>
 
-        <div id="calculator" class="tab-content">
-            <div class="calculator-container">
-                <h1>Advanced Bankroll Growth Calculator</h1>
-
-                <div class="input-group">
-                    <label for="initialBankroll">Initial Bankroll ($):</label>
-                    <input type="number" id="initialBankroll" value="100" min="50" step="50" required>
+        <div id="projection" class="tab-content">
+            <div class="card projection-container">
+                <h1>Projection</h1>
+                <div class="input-group full-width-input">
+                    <label for="initialBankroll">Initial Bankroll (IBR) (ETB):</label>
+                    <input type="number" id="initialBankroll" value="100" min="0" step="1" required>
                 </div>
-
-                <div class="input-group">
-                    <label for="oddsCalc">Odds (e.g., 1.3, 1.35, 1.4):</label>
-                    <input type="number" id="oddsCalc" value="1.3" step="0.01" min="1.0" required>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="bankrollMultiple">IBR Multiple Of:</label>
+                        <input type="number" id="bankrollMultiple" value="50" min="1" step="1" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="betPercentageOfFloorBankroll">Bet% Floor BR:</label>
+                        <input type="number" id="betPercentageOfFloorBankroll" value="0.20" min="0.01" max="1.0" step="0.01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="winRatePercent">Win %:</label>
+                        <input type="number" id="winRatePercent" value="90" min="0" max="100" step="0.1" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="projectionOdds">Odds (e.g., 1.3):</label>
+                        <input type="number" id="projectionOdds" value="1.3" step="0.01" min="1.0" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="numSlipsPerRound">No. slips /round:</label>
+                        <input type="number" id="numSlipsPerRound" value="10" min="1" step="1" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="numRoundsPerDay">No. rounds /day:</label>
+                        <input type="number" id="numRoundsPerDay" value="2" min="1" step="1" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="maxBetPerSlip">Max Bet/Slip (ETB):</label>
+                        <input type="number" id="maxBetPerSlip" value="1000" min="0.01" step="0.01" required>
+                        <small>Set to a very high value if no practical limit is desired.</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="projectionDays">BR Proj. (days):</label>
+                        <input type="number" id="projectionDays" value="365" min="1" required>
+                    </div>
                 </div>
-
-                <div class="input-group">
-                    <label for="winRatePercent">Win Rate (in % - e.g., 90 for 90%):</label>
-                    <input type="number" id="winRatePercent" value="90" min="0" max="100" step="0.1" required>
-                </div>
-
-                <div class="input-group">
-                    <label for="maxBetPerSlip">Maximum Bet per Slip ($):</label>
-                    <input type="number" id="maxBetPerSlip" value="1000" min="0.01" step="0.01" required>
-                    <small>Set to a very high value if no practical limit is desired.</small>
-                </div>
-
-                <div class="input-group">
-                    <label for="projectionDays">Project Bankroll For (Days):</label>
-                    <input type="number" id="projectionDays" value="365" min="1" required>
-                </div>
-
                 <button onclick="calculateGrowth()">Calculate Bankroll Growth</button>
-
-                <div id="errorMessage" class="error-message"></div>
-
-                <div class="results">
-                    <h2>Projected Bankroll Growth</h2>
-                    <p>End of Week 1: <strong><span id="week1Result"></span></strong></p>
-                    <p>End of Month 1: <strong><span id="month1Result"></span></strong></p>
-                    <p>End of Projected Days (<span id="projectedDaysLabel"></span> days): <strong><span id="finalProjectionResult"></span></strong></p>
+                <div id="errorMessage" class="projection-error-message"></div>
+                <div class="projection-results">
+                    <h2>Projected Outcomes</h2>
+                    <div class="results-column">
+                        <p>Day 1: <strong><span id="day1Result"></span></strong></p>
+                        <p>Week 1: <strong><span id="week1Result"></span></strong></p>
+                        <p>Month 1: <strong><span id="month1Result"></span></strong></p>
+                        <p>Year 1: <strong><span id="year1Result"></span></strong></p>
+                        <p>End of Projected Days (<span id="projectedDaysLabel"></span> days): <strong><span id="finalProjectionResult"></span></strong></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -706,9 +761,20 @@
         const tabContents = document.querySelectorAll('.tab-content');
         const selectAllBetsCheckbox = document.getElementById('selectAllBets');
         const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
-
         const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
         const filtersDropdownContent = document.getElementById('filtersDropdownContent');
+
+        // Projection specific DOM elements
+        const initialBankrollInput = document.getElementById('initialBankroll');
+        const bankrollMultipleInput = document.getElementById('bankrollMultiple');
+        const betPercentageOfFloorBankrollInput = document.getElementById('betPercentageOfFloorBankroll');
+        const winRatePercentInput = document.getElementById('winRatePercent');
+        const projectionOddsInput = document.getElementById('projectionOdds');
+        const numSlipsPerRoundInput = document.getElementById('numSlipsPerRound');
+        const numRoundsPerDayInput = document.getElementById('numRoundsPerDay');
+        const maxBetPerSlipInput = document.getElementById('maxBetPerSlip');
+        const projectionDaysInput = document.getElementById('projectionDays');
+        const errorMessageDiv = document.getElementById('errorMessage');
 
 
         // Initialize
@@ -730,11 +796,12 @@
                 
                 if (tab.dataset.tab === 'stats') {
                     updateUI('chart');
-                } else if (tab.dataset.tab === 'calculator') {
-                    calculateGrowth(); 
                 }
                 if (filtersDropdownContent.classList.contains('active')) {
                     filtersDropdownContent.classList.remove('active');
+                }
+                if (tab.dataset.tab === 'projection') {
+                    calculateGrowth(); // Call projection calculation when tab is opened
                 }
             });
         });
@@ -794,7 +861,6 @@
             const sport = sportFilter.value;
             const fromDateStr = fromDateFilter.value;
             const toDateStr = toDateFilter.value;
-
             const filteredBets = bets.filter(bet => {
                 const betDate = new Date(bet.date);
 
@@ -830,15 +896,13 @@
         function renderBetList(filteredBets) {
             filteredBets.sort((a, b) => new Date(b.date) - new Date(a.date));
             betListEl.innerHTML = '';
-
             if (filteredBets.length === 0) {
                 betListEl.innerHTML = '<tr><td colspan="9" class="no-data">No bets found matching your criteria.</td></tr>';
                 return;
             }
-
             filteredBets.forEach((bet, index) => {
                 const row = document.createElement('tr');
-                const originalIndex = bets.findIndex(originalBet => originalBet === bet); 
+                const originalIndex = bets.findIndex(originalBet => originalBet === bet);
                 row.dataset.originalIndex = originalIndex;
 
                 const checkboxCell = document.createElement('td');
@@ -847,7 +911,7 @@
                 checkbox.className = 'bet-checkbox';
                 checkboxCell.appendChild(checkbox);
                 row.appendChild(checkboxCell);
-                
+
                 ['date', 'sport', 'event', 'stake', 'odds', 'outcome'].forEach(field => {
                     const cell = document.createElement('td');
                     if (field === 'date') {
@@ -856,11 +920,11 @@
                         cell.textContent = bet.stake.toFixed(2) + ' ETB';
                     } else if (field === 'odds') {
                         cell.textContent = bet.odds.toFixed(2);
-                    } else if (field === 'outcome') {
-                        cell.textContent = bet.outcome;
-                        cell.className = bet.outcome;
                     } else {
                         cell.textContent = bet[field];
+                        if (field === 'outcome') {
+                            cell.classList.add(bet[field]);
+                        }
                     }
                     row.appendChild(cell);
                 });
@@ -874,7 +938,7 @@
                 const actionsCell = document.createElement('td');
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete';
-                deleteButton.className = 'danger';
+                deleteButton.className = 'danger small-button'; // Added small-button class for styling
                 deleteButton.onclick = () => displayConfirmationBox('Are you sure you want to delete this bet?', () => {
                     const betToDelete = bets[originalIndex];
                     if (betToDelete && betToDelete.outcome !== 'pending' && betToDelete.outcome !== 'void') {
@@ -885,8 +949,15 @@
                     updateUI('all');
                 });
                 actionsCell.appendChild(deleteButton);
-                row.appendChild(actionsCell);
 
+                // Add an edit button
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.className = 'secondary2 small-button'; // Added small-button class for styling
+                editButton.onclick = () => editBet(originalIndex);
+                actionsCell.appendChild(editButton);
+
+                row.appendChild(actionsCell);
                 betListEl.appendChild(row);
             });
         }
@@ -900,12 +971,10 @@
                 document.getElementById('avgStake').textContent = '0.00 ETB';
                 return;
             }
-
             const wins = settledBets.filter(bet => bet.outcome === 'win').length;
             const totalProfit = settledBets.reduce((sum, bet) => sum + calculateProfit(bet), 0);
             const totalStaked = settledBets.reduce((sum, bet) => sum + bet.stake, 0);
             const avgStake = totalStaked / settledBets.length;
-
             const winRate = (wins / settledBets.length) * 100;
             const roi = (totalProfit / totalStaked) * 100;
 
@@ -920,16 +989,15 @@
             if (profitChart && typeof profitChart.destroy === 'function') {
                 profitChart.destroy();
             }
-            
             const settledBets = filteredBets.filter(bet => bet.outcome !== 'pending' && bet.outcome !== 'void');
             if (settledBets.length === 0) {
                 const parent = ctx.parentNode;
                 const existingNoData = parent.querySelector('.no-data');
                 if (!existingNoData) {
-                     const noDataMessage = document.createElement('p');
-                     noDataMessage.className = 'no-data';
-                     noDataMessage.textContent = 'No settled bets to display for chart.';
-                     parent.appendChild(noDataMessage);
+                    const noDataMessage = document.createElement('p');
+                    noDataMessage.className = 'no-data';
+                    noDataMessage.textContent = 'No settled bets to display for chart.';
+                    parent.appendChild(noDataMessage);
                 }
                 ctx.style.display = 'none';
                 profitChart = null;
@@ -940,7 +1008,6 @@
             if (existingNoData) {
                 existingNoData.remove();
             }
-
             const chartLabels = settledBets.map((_, index) => `Bet ${index + 1}`);
             let cumulativeProfit = 0;
             const profitData = settledBets.map(bet => {
@@ -986,11 +1053,10 @@
                 displayMessageBox('No bets selected for deletion.', "info");
                 return;
             }
-
             displayConfirmationBox(`Are you sure you want to delete ${selectedCheckboxes.length} selected bets?`, () => {
                 const indexesToDelete = Array.from(selectedCheckboxes).map(checkbox => {
                     return parseInt(checkbox.closest('tr').dataset.originalIndex);
-                }).sort((a, b) => b - a);
+                }).sort((a, b) => b - a); // Sort in descending order to avoid index issues during deletion
 
                 indexesToDelete.forEach(index => {
                     const betToDelete = bets[index];
@@ -999,7 +1065,6 @@
                     }
                     bets.splice(index, 1);
                 });
-                
                 saveData();
                 updateUI('all');
                 selectAllBetsCheckbox.checked = false;
@@ -1007,168 +1072,138 @@
         }
 
         async function exportBetsToCSV() {
-            const headers = "Date,Sport,Event,Stake,Odds,Outcome,Profit\n";
-            const csv = bets.map(bet => 
-                `"${formatDate(bet.date)}","${bet.sport.replace(/"/g, '""')}","${bet.event.replace(/"/g, '""')}",${bet.stake},${bet.odds},${bet.outcome},${calculateProfit(bet)}`
-            ).join('\n');
-            const fullCsvContent = headers + csv;
-
-            if ('showSaveFilePicker' in window) {
-                try {
-                    const fileHandle = await window.showSaveFilePicker({
-                        suggestedName: 'the_green_book_bet_history.csv',
-                        types: [{
-                            description: 'CSV Files',
-                            accept: {
-                                'text/csv': ['.csv'],
-                            },
-                        }],
-                    });
-                    const writableStream = await fileHandle.createWritable();
-                    await writableStream.write(fullCsvContent);
-                    await writableStream.close();
-                    displayMessageBox('Bet history exported successfully!', "success");
-                } catch (error) {
-                    if (error.name === 'AbortError') {
-                        console.log('User aborted the save operation.');
-                    } else {
-                        console.error('Error saving file:', error);
-                        displayMessageBox('Error exporting file. Please try again or use the traditional download method.', "error");
-                    }
-                }
-            } else {
-                const blob = new Blob([fullCsvContent], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'the_green_book_bet_history.csv';
-                a.click();
-                URL.revokeObjectURL(url);
-                displayMessageBox('Bet history downloaded successfully!', "success");
-            }
+            const headers = "Date,Sport,Event,Stake,Odds,Outcome,Profit/Loss\n";
+            const csvRows = bets.map(bet => {
+                const date = formatDate(bet.date);
+                const profitLoss = calculateProfit(bet).toFixed(2);
+                return `${date},"${bet.sport}","${bet.event}",${bet.stake.toFixed(2)},${bet.odds.toFixed(2)},${bet.outcome},${profitLoss}`;
+            });
+            const csvContent = headers + csvRows.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute('download', 'bet_history.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            displayMessageBox('Bet history exported to CSV!', "success");
         }
 
-        function importBets(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const content = e.target.result;
-                const lines = content.split('\n').filter(line => line.trim() !== '');
-
-                if (lines.length === 0) {
-                    displayMessageBox('CSV file is empty.', "info");
+        function importBetsFromCSV() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) {
                     return;
                 }
-
-                const importedBets = [];
-                const startIndex = lines[0].startsWith('Date,Sport,Event,Stake,Odds,Outcome,Profit') ? 1 : 0;
-
-                for (let i = startIndex; i < lines.length; i++) {
-                    const parts = lines[i].split(',');
-                    if (parts.length >= 6) { 
-                        importedBets.push({
-                            date: parts[0].replace(/"/g, ''),
-                            sport: parts[1].replace(/"/g, ''),
-                            event: parts[2].replace(/"/g, ''),
-                            stake: parseFloat(parts[3]),
-                            odds: parseFloat(parts[4]),
-                            outcome: parts[5].replace(/"/g, '')
-                        });
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    const csvContent = event.target.result;
+                    try {
+                        const importedBets = parseCSV(csvContent);
+                        // Ask user how to import
+                        displayMessageBox('Choose import method:', 'prompt-options', [
+                            {
+                                text: 'Append (add to existing)',
+                                handler: () => {
+                                    bets = [...bets, ...importedBets];
+                                    saveData();
+                                    updateUI('all');
+                                    displayMessageBox('Bets appended successfully!', "success");
+                                }
+                            },
+                            {
+                                text: 'Overwrite (replace existing)',
+                                handler: () => {
+                                    displayConfirmationBox('Are you sure you want to overwrite all existing bets? This cannot be undone.', () => {
+                                        bets = importedBets;
+                                        bankroll = 1000; // Reset bankroll on overwrite
+                                        saveData();
+                                        updateUI('all');
+                                        displayMessageBox('Bets overwritten successfully!', "success");
+                                    });
+                                }
+                            }
+                        ]);
+                    } catch (error) {
+                        displayMessageBox(`Error importing CSV: ${error.message}`, "error");
+                        console.error("Error importing CSV:", error);
                     }
-                }
-
-                if (importedBets.length > 0) {
-                    bets = [...bets, ...importedBets];
-                    saveData();
-                    updateUI('all');
-                    displayMessageBox(`Successfully imported ${importedBets.length} bets.`, "success");
-                } else {
-                    displayMessageBox('No valid bets found in the CSV file.', "warning");
-                }
+                };
+                reader.readAsText(file);
             };
-            reader.readAsText(file);
+            input.click();
         }
-        
-        function createMessageBox(message, type = "info", onConfirm = null, onCancel = null) {
-            const existingBox = document.getElementById('customMessageBox');
-            if (existingBox) existingBox.remove();
 
-            const messageBox = document.createElement('div');
-            messageBox.id = 'customMessageBox';
-            messageBox.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: var(--card-color);
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                z-index: 2000;
-                max-width: 300px;
-                text-align: center;
-                color: var(--text-color);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            `;
-
-            const messageText = document.createElement('p');
-            messageText.textContent = message;
-            messageText.style.marginBottom = '15px';
-            messageText.style.color = `var(--${type}-color, var(--text-color))`;
-            messageBox.appendChild(messageText);
-
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.display = 'flex';
-            buttonContainer.style.gap = '10px';
-            buttonContainer.style.justifyContent = 'center';
-            if (onConfirm) {
-                const confirmBtn = document.createElement('button');
-                confirmBtn.textContent = 'OK';
-                confirmBtn.style.backgroundColor = 'var(--success-color)';
-                confirmBtn.style.color = 'white';
-                confirmBtn.style.flex = '1';
-                confirmBtn.onclick = () => {
-                    onConfirm();
-                    messageBox.remove();
-                };
-                buttonContainer.appendChild(confirmBtn);
+        function parseCSV(csvString) {
+            const lines = csvString.trim().split('\n');
+            if (lines.length === 0) {
+                return [];
             }
+            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+            const parsedBets = [];
+            for (let i = 1; i < lines.length; i++) {
+                const values = parseCSVLine(lines[i]);
+                if (values.length !== headers.length) {
+                    console.warn(`Skipping malformed row: ${lines[i]}`);
+                    continue; // Skip rows that don't match header count
+                }
+                const bet = {};
+                headers.forEach((header, index) => {
+                    let value = values[index];
+                    // Clean up potential quotes from CSV
+                    if (typeof value === 'string' && value.startsWith('"') && value.endsWith('"')) {
+                        value = value.substring(1, value.length - 1);
+                    }
 
-            if (onCancel) {
-                const cancelBtn = document.createElement('button');
-                cancelBtn.textContent = 'Cancel';
-                cancelBtn.style.backgroundColor = 'var(--danger-color)';
-                cancelBtn.style.color = 'white';
-                cancelBtn.style.flex = '1';
-                cancelBtn.onclick = () => {
-                    onCancel();
-                    messageBox.remove();
-                };
-                buttonContainer.appendChild(cancelBtn);
-            } else if (!onConfirm) {
-                const closeBtn = document.createElement('button');
-                closeBtn.textContent = 'Close';
-                closeBtn.style.backgroundColor = 'var(--primary-color)';
-                closeBtn.style.color = 'white';
-                closeBtn.style.flex = '1';
-                closeBtn.onclick = () => messageBox.remove();
-                buttonContainer.appendChild(closeBtn);
+                    switch (header) {
+                        case 'date':
+                            bet.date = new Date(value).toISOString();
+                            break;
+                        case 'stake':
+                        case 'odds':
+                        case 'profit/loss': // This is a calculated field, not an input field, so handle with care
+                            bet[header] = parseFloat(value);
+                            break;
+                        case 'sport':
+                        case 'event':
+                        case 'outcome':
+                            bet[header] = value;
+                            break;
+                        default:
+                            bet[header] = value;
+                    }
+                });
+                // Ensure all required fields are present and valid, if not, skip this row
+                if (!bet.date || isNaN(bet.stake) || isNaN(bet.odds) || !bet.sport || !bet.event || !bet.outcome) {
+                    console.warn(`Skipping row due to missing/invalid data: ${lines[i]}`);
+                    continue;
+                }
+                parsedBets.push(bet);
             }
-            
-            messageBox.appendChild(buttonContainer);
-            document.body.appendChild(messageBox);
+            return parsedBets;
         }
 
-        function displayMessageBox(message, type = "info") {
-            createMessageBox(message, type);
-        }
-
-        function displayConfirmationBox(message, onConfirmCallback, onCancelCallback = () => {}) {
-            createMessageBox(message, "warning", onConfirmCallback, onCancelCallback);
+        // Helper function to parse a single CSV line, handling commas within quoted fields
+        function parseCSVLine(line) {
+            const result = [];
+            let inQuote = false;
+            let currentField = '';
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuote = !inQuote;
+                } else if (char === ',' && !inQuote) {
+                    result.push(currentField.trim());
+                    currentField = '';
+                } else {
+                    currentField += char;
+                }
+            }
+            result.push(currentField.trim()); // Add the last field
+            return result;
         }
 
         // Event Listeners
@@ -1179,215 +1214,456 @@
             const odds = parseFloat(document.getElementById('odds').value);
             const outcome = document.getElementById('outcome').value;
 
-            if (sport && event && stake > 0 && odds >= 1.01) {
-                if (outcome === 'pending' && bankroll < stake) {
-                    displayMessageBox("Not enough funds in your bankroll to place this bet as pending!", "error");
-                    return;
-                }
-                if (outcome === 'loss' && bankroll < stake) {
-                    displayMessageBox("Not enough funds in your bankroll to record this loss!", "error");
-                    return;
-                }
-                
-                const newBet = {
-                    id: Date.now(),
-                    date: new Date().toISOString(),
-                    sport,
-                    event,
-                    stake,
-                    odds,
-                    outcome
-                };
-                bets.push(newBet);
-                
-                if (newBet.outcome === 'win') {
-                    bankroll += calculateProfit(newBet);
-                } else if (newBet.outcome === 'loss') {
-                    bankroll += calculateProfit(newBet);
-                }
-
-                saveData();
-                updateUI('all');
-
-                document.getElementById('sport').value = '';
-                document.getElementById('event').value = '';
-                document.getElementById('stake').value = '';
-                document.getElementById('odds').value = '';
-                document.getElementById('outcome').value = 'pending';
-            } else {
-                displayMessageBox('Please fill in all bet details correctly.', "warning");
+            if (!sport || !event || isNaN(stake) || stake <= 0 || isNaN(odds) || odds <= 1) {
+                displayMessageBox('Please fill in all bet details correctly.', "error");
+                return;
             }
+
+            const newBet = {
+                date: new Date().toISOString(),
+                sport,
+                event,
+                stake,
+                odds,
+                outcome
+            };
+
+            // Adjust bankroll immediately for 'win' or 'loss'
+            if (outcome === 'win') {
+                bankroll += (stake * odds) - stake;
+            } else if (outcome === 'loss') {
+                bankroll -= stake;
+            }
+
+            bets.push(newBet);
+            saveData();
+            updateUI('all');
+
+            // Clear form
+            document.getElementById('sport').value = '';
+            document.getElementById('event').value = '';
+            document.getElementById('stake').value = '';
+            document.getElementById('odds').value = '';
+            document.getElementById('outcome').value = 'pending';
         });
 
         depositBtn.addEventListener('click', () => {
-            displayInputBox('Enter deposit amount:', (amountStr) => {
-                const amount = parseFloat(amountStr);
-                if (!isNaN(amount) && amount > 0) {
-                    bankroll += amount;
+            displayPromptBox('Enter amount to deposit:', 'Deposit', (amount) => {
+                const depAmount = parseFloat(amount);
+                if (!isNaN(depAmount) && depAmount > 0) {
+                    bankroll += depAmount;
                     saveData();
                     updateUI('bankroll');
+                    displayMessageBox(`Successfully deposited ${depAmount.toFixed(2)} ETB.`, "success");
                 } else {
-                    displayMessageBox("Invalid amount!", "error");
+                    displayMessageBox('Please enter a valid deposit amount.', "error");
                 }
             });
         });
+
         withdrawBtn.addEventListener('click', () => {
-            displayInputBox('Enter withdrawal amount:', (amountStr) => {
-                const amount = parseFloat(amountStr);
-                if (!isNaN(amount) && amount > 0 && bankroll >= amount) {
-                    bankroll -= amount;
-                    saveData();
-                    updateUI('bankroll');
+            displayPromptBox('Enter amount to withdraw:', 'Withdraw', (amount) => {
+                const withAmount = parseFloat(amount);
+                if (!isNaN(withAmount) && withAmount > 0) {
+                    if (bankroll >= withAmount) {
+                        bankroll -= withAmount;
+                        saveData();
+                        updateUI('bankroll');
+                        displayMessageBox(`Successfully withdrew ${withAmount.toFixed(2)} ETB.`, "success");
+                    } else {
+                        displayMessageBox('Insufficient bankroll.', "error");
+                    }
                 } else {
-                    displayMessageBox("Invalid amount or insufficient funds!", "error");
+                    displayMessageBox('Please enter a valid withdrawal amount.', "error");
                 }
             });
         });
-        function displayInputBox(message, onConfirmCallback) {
-            const existingBox = document.getElementById('customInputBox');
+
+        exportBtn.addEventListener('click', exportBetsToCSV);
+        importBtn.addEventListener('click', importBetsFromCSV);
+
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.remove('light-mode');
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        searchInput.addEventListener('input', () => updateUI('bets'));
+        fromDateFilter.addEventListener('change', () => updateUI('bets'));
+        toDateFilter.addEventListener('change', () => updateUI('bets'));
+        sportFilter.addEventListener('change', () => updateUI('bets'));
+        selectAllBetsCheckbox.addEventListener('change', (e) => {
+            const checkboxes = document.querySelectorAll('.bet-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = e.target.checked;
+            });
+        });
+        deleteSelectedBtn.addEventListener('click', deleteSelectedBets);
+
+
+        // Custom Alert/Confirmation/Prompt Boxes
+        function displayMessageBox(message, type = 'info', options = null) {
+            const existingBox = document.getElementById('messageBox');
             if (existingBox) existingBox.remove();
 
-            const inputBox = document.createElement('div');
-            inputBox.id = 'customInputBox';
-            inputBox.style.cssText = `
+            const box = document.createElement('div');
+            box.id = 'messageBox';
+            box.style.cssText = `
                 position: fixed;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 background-color: var(--card-color);
-                padding: 20px;
+                padding: 25px;
                 border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                z-index: 2000;
-                max-width: 300px;
-                text-align: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 10000;
                 color: var(--text-color);
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                text-align: center;
+                max-width: 90%;
+                min-width: 280px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                animation: fadeIn 0.3s ease-out;
             `;
 
-            const messageText = document.createElement('p');
-            messageText.textContent = message;
-            messageText.style.marginBottom = '15px';
-            messageBox.appendChild(messageText);
-            const inputField = document.createElement('input');
-            inputField.type = 'number';
-            inputField.placeholder = 'Amount';
-            inputField.style.width = '100%';
-            inputField.style.marginBottom = '10px';
-            inputField.style.padding = '8px';
-            inputField.style.borderRadius = '5px';
-            inputField.style.border = '1px solid var(--text-secondary)';
-            inputField.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
-            inputField.style.color = 'var(--text-color)';
-            inputBox.appendChild(inputField);
-            const buttonContainer = document.createElement('div');
-            buttonContainer.style.display = 'flex';
-            buttonContainer.style.gap = '10px';
-            buttonContainer.style.justifyContent = 'center';
+            const msgText = document.createElement('p');
+            msgText.textContent = message;
+            msgText.style.marginBottom = '15px';
+            box.appendChild(msgText);
 
-            const okBtn = document.createElement('button');
-            okBtn.textContent = 'OK';
-            okBtn.style.backgroundColor = 'var(--primary-color)';
-            okBtn.style.color = 'white';
-            okBtn.style.flex = '1';
-            okBtn.onclick = () => {
-                onConfirmCallback(inputField.value);
-                inputBox.remove();
-            };
-            buttonContainer.appendChild(okBtn);
+            if (type === 'prompt' || type === 'prompt-options') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Enter value';
+                input.style.cssText = `
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid var(--text-secondary);
+                    border-radius: 5px;
+                    background-color: rgba(255,255,255,0.05);
+                    color: var(--text-color);
+                    margin-bottom: 10px;
+                `;
+                box.appendChild(input);
 
-            const cancelBtn = document.createElement('button');
-            cancelBtn.textContent = 'Cancel';
-            cancelBtn.style.backgroundColor = 'var(--danger-color)';
-            cancelBtn.style.color = 'white';
-            cancelBtn.style.flex = '1';
-            cancelBtn.onclick = () => inputBox.remove();
-            buttonContainer.appendChild(cancelBtn);
-            
-            inputBox.appendChild(buttonContainer);
-            document.body.appendChild(inputBox);
-            inputField.focus();
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.cssText = 'display: flex; justify-content: center; gap: 10px;';
+
+                const confirmBtn = document.createElement('button');
+                confirmBtn.textContent = options.confirmText || 'OK';
+                confirmBtn.style.cssText = `
+                    background-color: var(--primary-color);
+                    color: white;
+                    padding: 10px 15px;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    flex: 1;
+                `;
+                confirmBtn.onclick = () => {
+                    options.handler(input.value);
+                    box.remove();
+                };
+                buttonContainer.appendChild(confirmBtn);
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.style.cssText = `
+                    background-color: var(--text-secondary);
+                    color: white;
+                    padding: 10px 15px;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    flex: 1;
+                `;
+                cancelBtn.onclick = () => box.remove();
+                buttonContainer.appendChild(cancelBtn);
+
+                box.appendChild(buttonContainer);
+
+            } else if (type === 'prompt-options' && options && Array.isArray(options)) {
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.cssText = 'display: flex; flex-direction: column; gap: 10px;';
+
+                options.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.textContent = option.text;
+                    btn.className = 'button'; // Use existing button style
+                    btn.onclick = () => {
+                        option.handler();
+                        box.remove();
+                    };
+                    buttonContainer.appendChild(btn);
+                });
+                box.appendChild(buttonContainer);
+
+            } else if (type === 'confirmation') {
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.cssText = 'display: flex; justify-content: center; gap: 10px;';
+
+                const confirmBtn = document.createElement('button');
+                confirmBtn.textContent = 'Yes';
+                confirmBtn.style.cssText = `
+                    background-color: var(--danger-color);
+                    color: white;
+                    padding: 10px 15px;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    flex: 1;
+                `;
+                confirmBtn.onclick = () => {
+                    if (options && typeof options === 'function') options();
+                    box.remove();
+                };
+                buttonContainer.appendChild(confirmBtn);
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'No';
+                cancelBtn.style.cssText = `
+                    background-color: var(--text-secondary);
+                    color: white;
+                    padding: 10px 15px;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    flex: 1;
+                `;
+                cancelBtn.onclick = () => box.remove();
+                buttonContainer.appendChild(cancelBtn);
+
+                box.appendChild(buttonContainer);
+
+            } else { // 'info', 'success', 'error'
+                const okBtn = document.createElement('button');
+                okBtn.textContent = 'OK';
+                okBtn.style.cssText = `
+                    background-color: ${type === 'error' ? 'var(--danger-color)' : type === 'success' ? 'var(--success-color)' : 'var(--primary-color)'};
+                    color: white;
+                    padding: 10px 15px;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                `;
+                okBtn.onclick = () => box.remove();
+                box.appendChild(okBtn);
+            }
+            document.body.appendChild(box);
+        }
+
+        function displayConfirmationBox(message, onConfirm) {
+            displayMessageBox(message, 'confirmation', onConfirm);
+        }
+
+        function displayPromptBox(message, title, onConfirm) {
+            displayMessageBox(message, 'prompt', { title: title, handler: onConfirm });
         }
 
 
-        selectAllBetsCheckbox.addEventListener('change', (event) => {
-            document.querySelectorAll('.bet-checkbox').forEach(checkbox => {
-                checkbox.checked = event.target.checked;
-            });
-        });
-        searchInput.addEventListener('input', () => updateUI('bets'));
-        fromDateFilter.addEventListener('change', () => updateUI('bets'));
-        toDateFilter.addEventListener('change', () => updateUI('bets'));
-        sportFilter.addEventListener('change', () => updateUI('bets'));
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
-            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-        });
+        // Edit bet function
+        function editBet(originalIndex) {
+            const bet = bets[originalIndex];
+            if (!bet) return;
+
+            // Create a modal or form for editing
+            const editModal = document.createElement('div');
+            editModal.className = 'edit-modal';
+            editModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            `;
+
+            const editCard = document.createElement('div');
+            editCard.className = 'card'; // Reuse card style
+            editCard.style.cssText = `
+                padding: 20px;
+                width: 90%;
+                max-width: 400px;
+                position: relative;
+            `;
+
+            editCard.innerHTML = `
+                <h2>Edit Bet</h2>
+                <div class="input-group">
+                    <label for="editSport">Sport:</label>
+                    <input type="text" id="editSport" value="${bet.sport}" required>
+                </div>
+                <div class="input-group">
+                    <label for="editEvent">Event:</label>
+                    <input type="text" id="editEvent" value="${bet.event}" required>
+                </div>
+                <div class="input-group">
+                    <label for="editStake">Stake (ETB):</label>
+                    <input type="number" id="editStake" value="${bet.stake}" min="0.01" step="0.01" required>
+                </div>
+                <div class="input-group">
+                    <label for="editOdds">Odds:</label>
+                    <input type="number" id="editOdds" value="${bet.odds}" min="1.01" step="0.01" required>
+                </div>
+                <div class="input-group">
+                    <label for="editOutcome">Outcome:</label>
+                    <select id="editOutcome">
+                        <option value="pending" ${bet.outcome === 'pending' ? 'selected' : ''}>Pending</option>
+                        <option value="win" ${bet.outcome === 'win' ? 'selected' : ''}>Win</option>
+                        <option value="loss" ${bet.outcome === 'loss' ? 'selected' : ''}>Loss</option>
+                        <option value="void" ${bet.outcome === 'void' ? 'selected' : ''}>Void/Canceled</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button id="saveEditBtn" class="button">Save Changes</button>
+                    <button id="cancelEditBtn" class="secondary">Cancel</button>
+                </div>
+            `;
+
+            editModal.appendChild(editCard);
+            document.body.appendChild(editModal);
+
+            document.getElementById('saveEditBtn').onclick = () => {
+                const oldProfit = calculateProfit(bet);
+
+                bet.sport = document.getElementById('editSport').value.trim();
+                bet.event = document.getElementById('editEvent').value.trim();
+                bet.stake = parseFloat(document.getElementById('editStake').value);
+                bet.odds = parseFloat(document.getElementById('editOdds').value);
+                bet.outcome = document.getElementById('editOutcome').value;
+
+                if (!bet.sport || !bet.event || isNaN(bet.stake) || bet.stake <= 0 || isNaN(bet.odds) || bet.odds <= 1) {
+                    displayMessageBox('Please fill in all bet details correctly.', "error");
+                    return;
+                }
+
+                // Adjust bankroll based on outcome change
+                const newProfit = calculateProfit(bet);
+                if (bet.outcome !== 'pending' && bet.outcome !== 'void') {
+                    bankroll = bankroll - oldProfit + newProfit;
+                } else if (bet.outcome === 'pending' || bet.outcome === 'void') {
+                     // If it was settled before and now pending/void, revert profit
+                     bankroll -= oldProfit;
+                }
+                
+                saveData();
+                updateUI('all');
+                editModal.remove();
+                displayMessageBox('Bet updated successfully!', "success");
+            };
+
+            document.getElementById('cancelEditBtn').onclick = () => {
+                editModal.remove();
+            };
+        }
 
 
-        function calculateGrowth() {
-            const initialBankroll = parseFloat(document.getElementById('initialBankroll').value);
-            const odds = parseFloat(document.getElementById('oddsCalc').value);
-            const winRatePercent = parseFloat(document.getElementById('winRatePercent').value);
-            const maxBetPerSlip = parseFloat(document.getElementById('maxBetPerSlip').value);
-            const projectionDays = parseInt(document.getElementById('projectionDays').value);
-            const errorMessageDiv = document.getElementById('errorMessage');
-            errorMessageDiv.textContent = '';
+        // PROJECTION LOGIC
+        function getBankrollAtDay(day) {
+            let currentBankroll = parseFloat(initialBankrollInput.value);
+            const bankrollMultiple = parseFloat(bankrollMultipleInput.value);
+            const betPercentageOfFloorBankroll = parseFloat(betPercentageOfFloorBankrollInput.value);
+            const winRate = parseFloat(winRatePercentInput.value) / 100;
+            const projectionOdds = parseFloat(projectionOddsInput.value);
+            const numSlipsPerRound = parseInt(numSlipsPerRoundInput.value);
+            const numRoundsPerDay = parseInt(numRoundsPerDayInput.value);
+            const maxBetPerSlip = parseFloat(maxBetPerSlipInput.value);
+            const projectionDays = parseInt(projectionDaysInput.value);
 
-            if (isNaN(initialBankroll) || initialBankroll < 50 || initialBankroll % 50 !== 0) {
-                errorMessageDiv.textContent = 'Please enter an initial bankroll that is a multiple of 50 (e.g., 100, 150).';
-                return;
+            if (isNaN(currentBankroll) || isNaN(bankrollMultiple) || isNaN(betPercentageOfFloorBankroll) ||
+                isNaN(winRate) || isNaN(projectionOdds) || isNaN(numSlipsPerRound) ||
+                isNaN(numRoundsPerDay) || isNaN(maxBetPerSlip) || isNaN(projectionDays) ||
+                currentBankroll < 0 || bankrollMultiple < 1 || betPercentageOfFloorBankroll <= 0 || betPercentageOfFloorBankroll > 1 ||
+                winRate < 0 || winRate > 1 || projectionOdds <= 1 || numSlipsPerRound < 1 || numRoundsPerDay < 1 || maxBetPerSlip <= 0) {
+                errorMessageDiv.textContent = 'Please enter valid numbers for all projection inputs.';
+                return 0; // Return 0 or handle invalid input as appropriate
             }
-            if (isNaN(odds) || odds <= 1.0) {
-                errorMessageDiv.textContent = 'Please enter valid odds (must be greater than 1.0).';
-                return;
-            }
-            if (isNaN(winRatePercent) || winRatePercent < 0 || winRatePercent > 100) {
-                errorMessageDiv.textContent = 'Please enter a win rate between 0 and 100%.';
-                return;
-            }
-            if (isNaN(maxBetPerSlip) || maxBetPerSlip <= 0) {
-                errorMessageDiv.textContent = 'Please enter a positive value for maximum bet per slip.';
-                return;
-            }
-            if (isNaN(projectionDays) || projectionDays < 1) {
-                errorMessageDiv.textContent = 'Please enter a valid number of projection days (at least 1).';
-                return;
-            }
+            errorMessageDiv.textContent = ''; // Clear any previous error messages
 
-            const winRateDecimal = winRatePercent / 100;
-            const numSlipsPerRound = 10;
-            const betPercentageOfFloorBankroll = 0.20;
 
-            const roundGainFactor = (winRateDecimal * odds) - 1;
-            let currentBankroll = initialBankroll;
-            const dailyBankrolls = [];
-
-            for (let day = 0; day < projectionDays; day++) {
-                for (let roundNum = 0; roundNum < 2; roundNum++) {
-                    const floorBankroll = Math.floor(currentBankroll / 50) * 50;
-                    let betAmountRoundCalculated = betPercentageOfFloorBankroll * floorBankroll;
-                    let betPerSlipCalculated = betAmountRoundCalculated / numSlipsPerRound;
-                    let actualBetPerSlip = Math.min(betPerSlipCalculated, maxBetPerSlip);
-                    let actualBetAmountRound = actualBetPerSlip * numSlipsPerRound;
-                    if (actualBetAmountRound <= 0) {
-                         continue;
+            for (let d = 0; d <= day; d++) {
+                let dailyBankrollChange = 0;
+                for (let r = 0; r < numRoundsPerDay; r++) {
+                    const floorBankroll = Math.floor(currentBankroll / bankrollMultiple) * bankrollMultiple;
+                    let betAmount = floorBankroll * betPercentageOfFloorBankroll;
+                    
+                    // Apply max bet per slip
+                    if (betAmount > maxBetPerSlip) {
+                        betAmount = maxBetPerSlip;
                     }
 
-                    const roundChange = roundGainFactor * actualBetAmountRound;
-                    currentBankroll += roundChange;
+                    for (let s = 0; s < numSlipsPerRound; s++) {
+                        if (Math.random() < winRate) {
+                            // Win
+                            dailyBankrollChange += (betAmount * projectionOdds) - betAmount;
+                        } else {
+                            // Loss
+                            dailyBankrollChange -= betAmount;
+                        }
+                    }
                 }
-                dailyBankrolls.push(currentBankroll);
+                currentBankroll += dailyBankrollChange;
+                // Ensure bankroll doesn't drop below zero if it implies going into negative.
+                // Or set a minimum like initialBankrollInput value
+                if (currentBankroll < 0) {
+                    currentBankroll = 0; // Or some other floor value like 0 or initialBankrollInput.value
+                }
+            }
+            return currentBankroll;
+        }
+
+        // Format currency
+        const formatCurrency = (value) => {
+            if (value === undefined || isNaN(value)) {
+                return 'N/A';
+            }
+            return value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        };
+
+        // Calculation function for projection tab
+        function calculateGrowth() {
+            const projectionDays = parseInt(projectionDaysInput.value);
+
+            // Display results with ETB and spacing
+            document.getElementById('day1Result').textContent = `ETB ${formatCurrency(getBankrollAtDay(0))}`;
+            document.getElementById('week1Result').textContent = `ETB ${formatCurrency(getBankrollAtDay(6))}`;
+            document.getElementById('month1Result').textContent = `ETB ${formatCurrency(getBankrollAtDay(29))}`;
+            document.getElementById('year1Result').textContent = `ETB ${formatCurrency(getBankrollAtDay(364))}`;
+            document.getElementById('projectedDaysLabel').textContent = projectionDays;
+            document.getElementById('finalProjectionResult').textContent = `ETB ${formatCurrency(getBankrollAtDay(projectionDays - 1))}`;
+        }
+
+        // Run calculation on page load with default values
+        document.addEventListener('DOMContentLoaded', () => {
+            // Only run calculation if the projection tab is active on load or clicked
+            const projectionTab = document.querySelector('.tab[data-tab="projection"]');
+            if (projectionTab && projectionTab.classList.contains('active')) {
+                calculateGrowth();
             }
 
-            document.getElementById('week1Result').textContent = `$${dailyBankrolls[6] !== undefined ? dailyBankrolls[6].toFixed(2) : 'N/A'}`;
-            document.getElementById('month1Result').textContent = `$${dailyBankrolls[29] !== undefined ? dailyBankrolls[29].toFixed(2) : 'N/A'}`;
-
-            document.getElementById('projectedDaysLabel').textContent = projectionDays;
-            document.getElementById('finalProjectionResult').textContent = `$${dailyBankrolls[projectionDays - 1] !== undefined ? dailyBankrolls[projectionDays - 1].toFixed(2) : 'N/A'}`;
-        }
+            // Add event listeners for projection inputs to re-calculate on change
+            initialBankrollInput.addEventListener('input', calculateGrowth);
+            bankrollMultipleInput.addEventListener('input', calculateGrowth);
+            betPercentageOfFloorBankrollInput.addEventListener('input', calculateGrowth);
+            winRatePercentInput.addEventListener('input', calculateGrowth);
+            projectionOddsInput.addEventListener('input', calculateGrowth);
+            numSlipsPerRoundInput.addEventListener('input', calculateGrowth);
+            numRoundsPerDayInput.addEventListener('input', calculateGrowth);
+            maxBetPerSlipInput.addEventListener('input', calculateGrowth);
+            projectionDaysInput.addEventListener('input', calculateGrowth);
+        });
     </script>
 </body>
 </html>
-
